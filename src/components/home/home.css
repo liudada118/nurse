@@ -1,0 +1,171 @@
+.homeTitle{
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    background : linear-gradient(to right ,    #008099, #01d1c4);
+    height: 40vh;
+}
+.homeTitleInfo{
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content : center;
+    flex-direction: column;
+}
+.funcList{
+    display: flex;
+    align-items: center;
+    justify-content : center;
+    border: 1px solid #fff;
+    border-radius : 8px ;
+    color: #fff;
+}
+.borderRight{
+    border-right: 1px solid #fff;
+}
+.func{
+    padding: 5px 20px;
+    vertical-align : center;
+    cursor: pointer;
+}
+.iconfont{
+    padding-right: 8px;
+}
+.titleItem{
+    padding: 0 20px;
+    margin : 20px 0;
+    font-size: 24px;
+    color: #bd3434
+}
+.titleLeft{
+    border-right: 1px solid #999;
+    color : #415a61
+}
+.homeUsers{
+    background-color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+    top: -20vh;
+    width: 100%;
+}
+.func:hover{
+    background-color: rgba(255, 255, 255, 0.5)
+}
+.homeUser{
+    flex : 0 0 calc(20% - 20px);
+    /* height : 200px */
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content : center;
+    flex-direction: column;
+    margin: 10px;
+    padding: 10px;
+   
+}
+.homeNumberTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background : linear-gradient(to left ,    #008099, #01d1c4);
+    width: 100%;
+    font-size: 20px;
+    color: #fff;
+}
+.homeUserItem{
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 0px 1px #01abb0;
+}
+.homeImg{
+    
+}
+.homeImg img{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid #00d0c3
+}
+.homeInfo{
+    padding: 10px;
+    background-color: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row
+}
+.homeImg{
+    flex: 1;
+}
+.nameAndOther{
+    flex: 2.5;
+}
+.userInfo{
+    padding-top: 10px;
+    flex : 1;
+    color : #326167;
+    font-size: 18px;
+}
+.homeNumber{
+    
+}
+.userName{
+    font-size: 18px;
+    font-weight: bold;
+}
+.unhealthyItem{
+    padding-top: 10px;
+    flex : 1;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; */
+    font-size: 18px;
+    color: #883535
+}
+.button{
+    position: absolute;
+    right: 60px;
+}
+
+.addUser{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+}
+
+.addUser i{
+    font-size: 30px;
+    color: #00d0c3
+}
+
+#root{
+    background-color: #eee;
+    min-height: 100vh;
+}
+
+.listItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+}
+
+.listLabel{
+    flex: 3;
+}
+
+.listInput{
+    flex: 7;
+}
+a{
+    color : #000
+}

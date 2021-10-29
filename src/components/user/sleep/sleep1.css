@@ -1,0 +1,257 @@
+.sleepReport{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content : center ;
+    flex-direction: column;
+}
+.sleepItem1{
+    flex: 2;
+    display: flex;
+    margin-bottom: 10px;
+}
+.sleepItem2{
+    flex:  5 ;
+    display: flex;
+    margin-bottom: 10px;
+}
+.sleepItem3{
+    display: flex;
+    flex:  3 ;
+}
+.card{
+    width : calc((100% - 30px)/4);
+    padding : 10px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+   
+}
+.cardItemValue{
+    flex: 1;
+    font-size: 30px;
+    display: flex;
+    justify-content : center;
+    align-items: center;
+}
+.cardRight{
+    margin-right: 10px;
+}
+.item2card1{
+    width : calc((100% - 30px)*3/4 + 20px);
+    
+    margin-right: 10px;
+    display: flex;
+}
+.item2Chart1{
+    background-color: #f7f7f7;
+    margin-right: 10px;
+    width : calc((100% - 10px)/2);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.item2Chart2{
+    background-color: #f7f7f7;
+    width : calc((100% - 10px)/2);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.item2card2{
+    flex: 1;
+
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.card2item1{
+    flex: 3;
+    background-color: #f7f7f7;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+}
+.card2item2{
+    flex: 2;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+/* .item2Content{
+    width : calc((100% - 10px)/2);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+} */
+.marginBottom{
+    margin-bottom : 10px
+}
+.item2Content{
+    height : calc((100% - 20px)/3);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f7f7f7;
+}
+.item3card1{
+    flex: 1;
+    border-radius: 10px;
+    margin-right: 10px;
+    display: flex;
+}
+/* .item3card1{
+    background-color: #f7f7f7;
+    flex-direction: column;
+    padding: 10px;
+} */
+.segSleepChart{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    flex-direction: column;
+    padding: 10px;
+}
+.item3Content{
+   
+    padding: 10px;
+    width : calc((100% - 20px)/3);
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    display: flex;
+    flex-direction: column;
+}
+
+.item3card2{
+    padding: 10px;
+    flex: 1;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+}
+
+.breathes{
+    display: flex;
+    align-items : center;
+    justify-content : center;
+    text-align : center;
+    margin-top: 10px;
+}
+.breathe{
+    padding: 0 12px;
+    flex: 1;
+}
+.breatheRight{
+    border-right: 1px solid #aaa;
+    flex: 1;
+}
+.breatheNum{
+    font-size: 30px;
+    vertical-align : middle;
+    text-align: center;
+}
+.breatheUnit{
+    font-size: 10px;
+}
+.breatheState{
+    font-size: 12px;
+    color: #aaa;
+}
+
+* p{
+    margin: 0;
+    padding: 0;
+}
+
+.card2item2{
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.segSleepIcon{
+    display: flex;
+    justify-content : space-between
+}
+
+.boxShadow{
+    box-shadow: 0px 0px 3px  1px rgb(0 0 0 / 25%);
+}
+
+.segItem{
+    display: flex;
+    align-items : center;
+}
+.circle{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+.segSleepTitles{
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+.cardItemTitle{
+    font-size: 18px;
+}
+
+.segSleepData{
+    display: flex;
+    width: 100%;
+    height: 40px;
+    padding : 10px 20px;
+}
+.segSleepTime{
+    display: flex;
+    margin: 0 20px;
+    justify-content : space-between
+}
+
+.sleepTip{
+    display: flex;
+    /* justify-content : center; */
+    align-items : center;
+    padding : 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.redCircle{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: red;
+}
+
+.sleepTipDesc{
+    padding : 10px 0;
+}
+
+
+
+.card2item3{
+    width : calc((100% - 10px)/2);
+    border-radius: 10px;
+    margin-right: 10px;
+    background-color: #f7f7f7;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.card2item4{
+    width : calc((100% - 10px)/2);
+    flex: 1;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}

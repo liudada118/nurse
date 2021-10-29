@@ -1,0 +1,143 @@
+/* .sleepReport{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content : center ;
+    flex-direction: column;
+}
+.reportItem{
+    flex: 0 0 calc(33% - 20px) ;
+    background-color: #c1cad2;
+    height: 100%;
+    margin: 0 10px;
+    border-radius: 10px;
+}
+.reportItem{
+    padding: 10px;
+}
+.card{
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.whiteCard{
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    margin-bottom: 10px;
+    padding: 10px
+}
+
+.sleepScore{
+    background-color: #4d85f4;
+    padding: 10px;
+    font-size: 30px;
+    vertical-align: middle
+}
+.score{
+    font-size: 16px;
+}
+.sleepAllTime{
+    background-color: #fff;
+    padding: 4px 10px;
+}
+
+* p{
+    margin: 0;
+    padding: 0;
+}
+
+.sleepEval{
+    font-size: 16px;
+}
+
+.sleepIcon{
+    color: #62c4f1
+}
+
+.segCard{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.segSleepIcon{
+    display: flex;
+    justify-content : space-between
+}
+
+.segItem{
+    display: flex;
+    align-items : center;
+}
+.circle{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+.segSleepTitles{
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+.segSleepData{
+    display: flex;
+    width: 100%;
+    height: 40px;
+    padding : 10px 20px;
+}
+.segSleepTime{
+    display: flex;
+    margin: 0 20px;
+    justify-content : space-between
+}
+
+.sleepProject{
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.sleepDataItems{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.sleepDataItem{
+    flex: 0 0 calc(50% - 5px);
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction : column;
+    align-items : center;
+    justify-content :center;
+    border-radius: 10px;
+}
+.sleepDataItemLeft{
+    margin-right: 10px;
+}
+
+.breathes{
+    display: flex;
+    align-items : center;
+    justify-content : center;
+    text-align : center;
+}
+.breathe{
+    padding: 0 12px;
+}
+.breatheRight{
+    border-right: 1px solid #aaa;
+}
+.breatheNum{
+    font-size: 20px;
+}
+.breatheUnit{
+    font-size: 10px;
+}
+.breatheState{
+    font-size: 12px;
+    color: #aaa;
+} */

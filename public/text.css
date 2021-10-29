@@ -1,0 +1,24 @@
+@font-face {font-family: "text";
+    src: url("HelveticaRoundedLTStd-Bd.otf")
+  }
+.iconText{
+    font-family: "text";
+}
+@font-face {font-family: "startText";
+  src: url("./Skia.ttf")
+}
+.startText{
+  font-family: "startText";
+}
+@font-face {font-family: "chinaText";
+  src: url("./FZLTCXHJW.TTF")
+}
+.chinaText{
+  font-family : "chinaText";
+}
+@font-face {font-family: "ChinaText";
+  src: url("./china.TTF")
+}
+.ChinaText{
+  font-family : "ChinaText";
+}
