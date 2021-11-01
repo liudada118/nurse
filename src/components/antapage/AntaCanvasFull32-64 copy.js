@@ -35,6 +35,7 @@ const yMax = 255
 let oldWsData = new Array(1024).fill(0)
 let leftStoke = new Stoke(50)
 let rightStoke = new Stoke(50)
+let reduce = new Stoke(50)
 
 const localurl = 'http://127.0.0.1:8080'
 const onwsurl = 'ws://127.0.0.1:9999'
@@ -516,7 +517,7 @@ class Anta extends React.Component {
           this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
 
           if (oldBedFetchData2 != bedFetchData2) {
-          this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
+            this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
           }
           // let newTime = new Date().getTime()
           // if (parseInt((newTime - oldTime)/1000) / 2) {
@@ -568,6 +569,30 @@ class Anta extends React.Component {
         lastTimeSum = timeSum
 
 
+        let leftAndRight = computeStoke([...jsonObject.data], [...oldWsData], 32, 32)
+        let left = leftAndRight[0]
+        let right = leftAndRight[1]
+
+        leftStoke.addValue(left)
+        rightStoke.addValue(right)
+
+        let leftRes1 = leftStoke.computeValue(40)
+        let rightRes1 = rightStoke.computeValue(40)
+        reduce.addValue(Math.abs(leftRes1 - rightRes1))
+        console.log(leftRes1, rightRes1)
+
+        if ((leftRes1 >= 25 && rightRes1 < 10) || (rightRes1 >= 25 && leftRes1 < 10)) {
+          this.bedFetchData1.current.innerHTML = '危险'
+        } else {
+          this.bedFetchData1.current.innerHTML = '正常'
+        }
+        console.log(reduce)
+        this.initCharts({ yData: reduce.stack, xData: [], index: 0 + 1, name: '中风', myChart: myChart1, })
+
+
+        // this.footForm.current.innerHTML = `<div>left ${leftRes1}</div> <div>right ${rightRes1}</div>`
+        wsPointData = addSide(wsPointData, 32, 32, 2, 2)
+        oldWsData = [...jsonObject.data]
 
 
 
@@ -737,10 +762,10 @@ class Anta extends React.Component {
         }
         // moveArr = [1,2,3,4,5]
 
-        this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
+        // this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
 
         if (oldBedFetchData2 != bedFetchData2) {
-        this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
+          this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
         }
         // let newTime = new Date().getTime()
         // if (parseInt((newTime - oldTime)/1000) / 2) {
@@ -908,152 +933,152 @@ class Anta extends React.Component {
 
     return (
       <>
-        
+
         <div style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}>
-         
-        
-
-              <div style={{ width: '100%', height: '100%', overflow: 'hidden' }} ref={this.canvas}>
-                <Com valueg={this.state.valueg} valuej={this.state.valuej}>
-                  {/* <video src={video}></video> */}
-                  <Canvas
-                    gl={{ antialias: false, alpha: false }}
-                    style={{ width: '100%', height:'100%' , backgroundColor: 'black' }}
-                    camera={{ zoom: 1, fov: 65, position: [0, 1400, 2], near: 1, far: 10000 }}
-                    raycaster={{ params: { Points: { threshold: 0.1 } } }}>
-
-                    <pointLight position={[-3000, 13000, -6000]} />
-                    <ambientLight intensity={0.01} />
-                    <color attach='background' args={['#070822']} />
-                    <Controls />
-
-                    <Particles
-                      fliter={this.state.fliter}
-                      postitonX={this.state.postitonX}
-                      postitonY={this.state.postitonY}
-                      postitonZ={this.state.postitonZ}
-                      rotationY={this.state.rotationY}
-                      valuej={this.state.valuej}
-                      valueg={this.state.valueg}
-                      props={this.props}
-                      start={this.start}
-                      first={this.firstImg}
-
-                      next={this.nextRef} drop={this.drop}
-                      canvas={this.canvas}
-
-                      right={this.rightOn}
-                      rightIcon={this.rightIcon}
-                      leftIcon={this.leftIcon}
-                      left={this.leftOn}
-
-                      lfc={this.lfc}
-                      balance={this.balance}
-                      twonum={this.twoNum}
-                      leftPad={this.leftPad}
-                      rightPad={this.rightPad}
-                      leftInversion={this.leftInversion}
-                      rightInversion={this.rightInversion}
-                      footForm={this.footForm}
-                      train={this.train}
-                      pronation={this.pronation}
-                      footType={this.footType}
-                      footRef={this.footRef}
-
-                      footZone={this.footZone}
-                      data={this.data}
-                      chair={this.state.data}
-
-                      blaImg={this.blaImg}
-                      press={this.press}
-                      pointCount={1024} />
-                    <Suspense fallback={
-                      <>
-                        <Box position={[0, 0, 0]} />
-
-                      </>}>
 
 
-                  
 
-                    </Suspense>
+          <div style={{ width: '100%', height: '100%', overflow: 'hidden' }} ref={this.canvas}>
+            <Com valueg={this.state.valueg} valuej={this.state.valuej}>
+              {/* <video src={video}></video> */}
+              <Canvas
+                gl={{ antialias: false, alpha: false }}
+                style={{ width: '100%', height: '100%', backgroundColor: 'black' }}
+                camera={{ zoom: 1, fov: 65, position: [0, 1400, 2], near: 1, far: 10000 }}
+                raycaster={{ params: { Points: { threshold: 0.1 } } }}>
 
-                  </Canvas>
-                </Com>
-              </div>
-          
-            <div className="content" >
-              <div className="footCard">
-                <div className="infoCard">
-                  <div className="box-card showCard footbgc " style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div className='flexcenter' style={{ flex: 1, borderRight: '2px solid black' }}>
-                      <div className="text item footForm whiteColor flexTitle">呼吸</div>
-                      <div ref={this.footForm} className="text item footTypeInfo textGradeColor iconText" >--</div>
-                    </div>
-                    <div className='flexcenter' style={{ flex: 1 }}>
-                      <div className="text item footForm whiteColor flexTitle">在床时间</div>
-                      <div ref={this.pronation} className="text item footTypeInfo textGradeColor iconText" >0</div>
-                    </div>
+                <pointLight position={[-3000, 13000, -6000]} />
+                <ambientLight intensity={0.01} />
+                <color attach='background' args={['#070822']} />
+                <Controls />
+
+                <Particles
+                  fliter={this.state.fliter}
+                  postitonX={this.state.postitonX}
+                  postitonY={this.state.postitonY}
+                  postitonZ={this.state.postitonZ}
+                  rotationY={this.state.rotationY}
+                  valuej={this.state.valuej}
+                  valueg={this.state.valueg}
+                  props={this.props}
+                  start={this.start}
+                  first={this.firstImg}
+
+                  next={this.nextRef} drop={this.drop}
+                  canvas={this.canvas}
+
+                  right={this.rightOn}
+                  rightIcon={this.rightIcon}
+                  leftIcon={this.leftIcon}
+                  left={this.leftOn}
+
+                  lfc={this.lfc}
+                  balance={this.balance}
+                  twonum={this.twoNum}
+                  leftPad={this.leftPad}
+                  rightPad={this.rightPad}
+                  leftInversion={this.leftInversion}
+                  rightInversion={this.rightInversion}
+                  footForm={this.footForm}
+                  train={this.train}
+                  pronation={this.pronation}
+                  footType={this.footType}
+                  footRef={this.footRef}
+
+                  footZone={this.footZone}
+                  data={this.data}
+                  chair={this.state.data}
+
+                  blaImg={this.blaImg}
+                  press={this.press}
+                  pointCount={1024} />
+                <Suspense fallback={
+                  <>
+                    <Box position={[0, 0, 0]} />
+
+                  </>}>
+
+
+
+
+                </Suspense>
+
+              </Canvas>
+            </Com>
+          </div>
+
+          <div className="content" >
+            <div className="footCard">
+              <div className="infoCard">
+                <div className="box-card showCard footbgc " style={{ display: 'flex', flexDirection: 'row' }}>
+                  <div className='flexcenter' style={{ flex: 1, borderRight: '2px solid black' }}>
+                    <div className="text item footForm whiteColor flexTitle">呼吸</div>
+                    <div ref={this.footForm} className="text item footTypeInfo textGradeColor iconText" >--</div>
                   </div>
-                  <div className="box-card trainCard footbgc flexcenter">
-                    <div className="text item trainType whiteColor flexTitle">在床状态</div>
-                    <div className="text item trainTypeInfo textGradeColor iconText" style={{ width: '40%' }} ref={this.bedFetchData1}>
-                      {/* <img ref={this.footType} src={normal} alt="" /> */}
-                      {/* {this.state.bedFetchData1} */}
-                      <img src="" src={on} style={{ display: 'none' }} alt="" />
-                      <img src="" src={out} style={{ display: 'none' }} alt="" />
-                    </div>
+                  <div className='flexcenter' style={{ flex: 1 }}>
+                    <div className="text item footForm whiteColor flexTitle">在床时间</div>
+                    <div ref={this.pronation} className="text item footTypeInfo textGradeColor iconText" >0</div>
                   </div>
                 </div>
-                <div className="detailInfoCard">
-                  <div className="footbgc cordCard">
-                    <div className="cordText whiteColor">{`Core  `}</div>
-                    <div className="cordProgress">
-                      <div className="cordProgressAddress" ref={this.lfc} ></div>
-                    </div>
-
-                    {/* `calc(${  props ? props.props['LPA'] * 100 : 0}% + 20px)`} */}
+                <div className="box-card trainCard footbgc flexcenter">
+                  <div className="text item trainType whiteColor flexTitle">在床状态</div>
+                  <div className="text item trainTypeInfo textGradeColor iconText" style={{ width: '40%' }} ref={this.bedFetchData1}>
+                    {/* <img ref={this.footType} src={normal} alt="" /> */}
+                    {/* {this.state.bedFetchData1} */}
+                    <img src="" src={on} style={{ display: 'none' }} alt="" />
+                    <img src="" src={out} style={{ display: 'none' }} alt="" />
                   </div>
-                  <div className="moreInfoCard">
-                    <div className="footInfo footbgc" style={{ position: 'relative' }}>
-                      <div className="footText whiteColor" style={{ position: 'absolute', top: 8, left: 8 }}>体动</div>
-                      {/* <div className="footProgress"> */}
-                      {/* <div className="footProgressAddress" ref={this.balance}></div> */}
-                      <div id="myChart1" style={{ flex: 1 }}></div>
-                      {/* </div> */}
+                </div>
+              </div>
+              <div className="detailInfoCard">
+                <div className="footbgc cordCard">
+                  <div className="cordText whiteColor">{`Core  `}</div>
+                  <div className="cordProgress">
+                    <div className="cordProgressAddress" ref={this.lfc} ></div>
+                  </div>
 
-                    </div>
-                    <div className="trainInfo">
-                      <div className="pronation footbgc " style={{ display: 'flex', flexDirection: 'row' }}>
-                        <div className='flexcenter' style={{ flex: 1, borderRightWidth: 2, borderRight: 'solid black' }} >
-                          <div className="pronationText whiteColor flexTitle">中风预警</div>
-                          <div className="pronationInfo textGradeColor iconText" style={{ fontSize: this.state.windowWidth > 768 ? '30px' : '20px' }} ref={this.stroke} >正常</div>
-                        </div>
-                        <div className='flexcenter' style={{ flex: 1 }}>
-                          <div className="pronationText whiteColor flexTitle">呼吸暂停</div>
-                          <div className="pronationInfo textGradeColor iconText" style={{ fontSize: this.state.windowWidth > 768 ? '30px' : '20px' }} ref={this.breathPause}>正常</div>
-                        </div>
+                  {/* `calc(${  props ? props.props['LPA'] * 100 : 0}% + 20px)`} */}
+                </div>
+                <div className="moreInfoCard">
+                  <div className="footInfo footbgc" style={{ position: 'relative' }}>
+                    <div className="footText whiteColor" style={{ position: 'absolute', top: 8, left: 8 }}>中风风险趋势</div>
+                    {/* <div className="footProgress"> */}
+                    {/* <div className="footProgressAddress" ref={this.balance}></div> */}
+                    <div id="myChart1" style={{ flex: 1 }}></div>
+                    {/* </div> */}
+
+                  </div>
+                  <div className="trainInfo">
+                    <div className="pronation footbgc " style={{ display: 'flex', flexDirection: 'row' }}>
+                      <div className='flexcenter' style={{ flex: 1, borderRightWidth: 2, borderRight: 'solid black' }} >
+                        <div className="pronationText whiteColor flexTitle">中风预警</div>
+                        <div className="pronationInfo textGradeColor iconText" style={{ fontSize: this.state.windowWidth > 768 ? '30px' : '20px' }} ref={this.stroke} >正常</div>
                       </div>
-                      {/* <div className='footbgc flexcenter'>
+                      <div className='flexcenter' style={{ flex: 1 }}>
+                        <div className="pronationText whiteColor flexTitle">呼吸暂停</div>
+                        <div className="pronationInfo textGradeColor iconText" style={{ fontSize: this.state.windowWidth > 768 ? '30px' : '20px' }} ref={this.breathPause}>正常</div>
+                      </div>
+                    </div>
+                    {/* <div className='footbgc flexcenter'>
                         <div className="flexTitle"></div>
                       </div> */}
-                      <div className="train footbgc flexcenter">
-                        <div className="trainText whiteColor flexTitle">睡姿</div>
-                        <div ref={this.train} style={{ fontSize: this.state.windowWidth > 768 ? '30px' : '20px' }} className="trainProportion textGradeColor iconText">
-                          {/* {this.state.sleep} */}
-                          <img src={side} style={{ display: 'none', height: '80%' }} alt="" />
-                          <img src={sleep} style={{ display: 'none', height: '80%' }} alt="" />
-                        </div>
+                    <div className="train footbgc flexcenter">
+                      <div className="trainText whiteColor flexTitle">睡姿</div>
+                      <div ref={this.train} style={{ fontSize: this.state.windowWidth > 768 ? '30px' : '20px' }} className="trainProportion textGradeColor iconText">
+                        {/* {this.state.sleep} */}
+                        <img src={side} style={{ display: 'none', height: '80%' }} alt="" />
+                        <img src={sleep} style={{ display: 'none', height: '80%' }} alt="" />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* <div className="footModel footbgc"><Demo props={this.state.res} footZone={this.footZone} /></div>*/}
-
-
             </div>
-         
+            {/* <div className="footModel footbgc"><Demo props={this.state.res} footZone={this.footZone} /></div>*/}
+
+
+          </div>
+
         </div>
       </>
     )
