@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import './home.css'
 import 'antd/dist/antd.css'
-import { Modal, Input } from 'antd'
+import { Modal, Input, Select } from 'antd'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 // import { obj } from '../../assets/js/ws'
 const demoImgArr = ["a", "b", "c", 'd', 'e', 'f', 'g', 'h']
 const ticks = demoImgArr.map(item => require("../../assets/img/" + item + ".jpeg"))
 console.log(ticks)
+
+const { Option } = Select;
+
 const funcArr = [{ text: '房间管理', icon: ' &#xe60f;' },
 { text: '今日一览', icon: '&#xe7d2;' },
 { text: '需求通报', icon: '&#xe6e4;' },
@@ -43,6 +46,7 @@ export default function Home() {
     const [age, setAge] = useState('')
     const [gender, setGender] = useState('')
     const [introduce, setIntroduce] = useState('')
+    const [devicedArr, setDevicedArr] = useState([])
     const showEditModal = (data) => {
         setId(data.id)
         setDeviceId(data.deviceId)
@@ -86,15 +90,15 @@ export default function Home() {
     const handleAddOk = () => {
         setIsAddVisible(false);
         axios.post(`http://sensor.bodyta.com:8888/insure/insertBed?nickName=${nickName}&headImg=${headImg}&deviceId=${deviceId}&roomId=${roomId}&age=${age}&gender=${gender}&introduce=${introduce}`)
-        .then(() => {
-            axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
-            .then((res) => {
-                console.log(res.data.data)
-                setUserArr(res.data.data)
-            }).catch(err => {
-                console.log(err)
+            .then(() => {
+                axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
+                    .then((res) => {
+                        console.log(res.data.data)
+                        setUserArr(res.data.data)
+                    }).catch(err => {
+                        console.log(err)
+                    })
             })
-        })
     };
     const handleAddCancel = () => {
         setIsAddVisible(false);
@@ -128,6 +132,21 @@ export default function Home() {
         }
     }
 
+    function onChange(value) {
+        setDeviceId(value)
+    }
+
+    function onBlur() {
+        console.log('blur');
+    }
+
+    function onFocus() {
+        console.log('focus');
+    }
+
+    function onSearch(val) {
+        console.log('search:', val);
+    }
 
     useEffect(() => {
         axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
@@ -138,43 +157,104 @@ export default function Home() {
                 console.log(err)
             })
     }, [])
+
+    useEffect(() => {
+        axios.get('http://sensor.bodyta.com:8888/index/selectSensorByType?type=bed')
+            .then(res => {
+                console.log(res, 'bed')
+                if (res.data) {
+                    setDevicedArr(res.data.data)
+                }
+            })
+    }, [])
     const editList = [
         { label: 'id', value: id },
-        { label: 'nickName', value: nickName },
-        { label: 'headImg', value: headImg },
-        { label: 'deviceId', value: deviceId },
-        { label: 'roomId', value: roomId },
-        { label: 'age', value: age },
-        { label: 'gender', value: gender },
-        { label: 'introduce', value: introduce },
+        { label: '名字', value: nickName },
+        { label: '头像', value: headImg },
+        { label: '设备Id', value: deviceId },
+        { label: '房间号', value: roomId },
+        { label: '年龄', value: age },
+        { label: '性别', value: gender },
+        { label: '介绍', value: introduce },
     ]
     const addList = [
-        { label: 'nickName', value: nickName },
-        { label: 'headImg', value: headImg },
-        { label: 'deviceId', value: deviceId },
-        { label: 'roomId', value: roomId },
-        { label: 'age', value: age },
-        { label: 'gender', value: gender },
-        { label: 'introduce', value: introduce },
+        { label: '名字', value: nickName },
+        { label: '头像', value: headImg },
+        { label: '设备Id', value: deviceId },
+        { label: '房间号', value: roomId },
+        { label: '年龄', value: age },
+        { label: '性别', value: gender },
+        { label: '介绍', value: introduce },
     ]
     return (
         <>
-            <Modal title="编辑" visible={isEditVisible} onOk={handleEditOk} onCancel={handleEditCancel}>
+            <Modal title="编辑" visible={isEditVisible} okText={'确定'} cancelText={'取消'} onOk={handleEditOk} onCancel={handleEditCancel}>
                 {editList.map(item => {
                     return (
-                        <div className='listItem'>
-                            <span className='listLabel'>{item.label}:</span>
-                            {item.label == 'id' ? <span>{item.value}</span> : <Input className='listInput' placeholder={item.label} value={item.value} onChange={(e) => { changeValue(e, item.label) }} />}
+                        <div className='listItem' key={item.label}>
+                            {
+                                <> <span className='listLabel'>{item.label}:</span>
+                                    {item.label == 'id'
+                                        ? <span>{item.value}</span>
+                                        : item.label == 'deviceId' ?
+                                            <Select
+                                                showSearch
+                                                className='listInput'
+                                                placeholder="Select a devicedId"
+                                                optionFilterProp="children"
+                                                value={item.value}
+                                                onChange={onChange}
+                                                onFocus={onFocus}
+                                                onBlur={onBlur}
+                                                onSearch={onSearch}
+                                                filterOption={(input, option) =>
+                                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                }
+
+                                            >
+                                                {devicedArr.map((item, index) => {
+                                                    return (
+                                                        <Option key={item} value={item.deviceId}>{item.deviceId}</Option>
+                                                    )
+                                                })}
+                                            </Select>
+                                            : <div className='listInput'><Input placeholder={item.label} value={item.value} onChange={(e) => { changeValue(e, item.label) }} /></div>}</>
+                            }
                         </div>
                     )
                 })}
             </Modal>
-            <Modal title="添加" visible={isAddVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
+            <Modal title="添加" okText={'确定'} cancelText={'取消'} visible={isAddVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
                 {addList.map(item => {
                     return (
-                        <div className='listItem'>
-                            <span className='listLabel'>{item.label}:</span>
-                            <Input className='listInput' placeholder={item.label} value={item.value} onChange={(e) => { changeValue(e, item.label) }} />
+                        <div className='listItem' key={item.label}>
+                            {item.label == 'deviceId'
+                                ? <>
+                                    <span className='listLabel'>{item.label}:</span>
+                                    <Select
+                                        className='listInput'
+                                        showSearch
+
+                                        placeholder="Select a devicedId"
+                                        optionFilterProp="children"
+                                        onChange={onChange}
+                                        onFocus={onFocus}
+                                        onBlur={onBlur}
+                                        onSearch={onSearch}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        {devicedArr.map((item, index) => {
+                                            return (
+                                                <Option key={item} value={item.deviceId}>{item.deviceId}</Option>
+                                            )
+                                        })}
+                                    </Select>
+                                </>
+                                : <> <span className='listLabel'>{item.label}:</span>
+                                    <div className='listInput'>
+                                        <Input placeholder={item.label} value={item.value} onChange={(e) => { changeValue(e, item.label) }} /></div></>}
                         </div>
                     )
                 })}
@@ -209,23 +289,23 @@ export default function Home() {
                 <div className="homeUsers">
                     {userArr.map((a, index) => {
                         return (
-                            <div className="homeUser">
+                            <div className="homeUser" key={a}>
                                 <div className="homeUserItem">
                                     <div className="homeNumberTitle">
                                         <div className="homeNumber">{a.roomId}</div>
-                                        <i className='iconfont' onClick={() => { showEditModal({ id: a.id, nickName: a.nickName, headImg: a.headImg, deviceId: a.deviceId, roomId: a.roomId, age: a.age, gender: a.gender, introduce: a.introduce }) }}>&#xf0213;</i>
+                                        <i className='iconfont' onClick={() => { showEditModal({ id: a.id, nickName: a.nickName, headImg: a.headImg, deviceId: a.deviceId, roomId: a.roomId, age: a.age, gender: a.gender, introduce: a.introduce }) }}>&#xe600;</i>
                                     </div>
                                     <Link to={`/${a.deviceId}`}>
-                                    <div className="homeInfo">
-                                        <div className="homeImg">
-                                            <img src={a.img} alt="" />
+                                        <div className="homeInfo">
+                                            <div className="homeImg">
+                                                <img src={a.img} alt="" />
+                                            </div>
+                                            <div className="nameAndOther">
+                                                <div className='userName'>{a.nickName}</div>
+                                                <div>在床{a.onBedTime}</div>
+                                                <div>风险:{a.stroke ? '危险' : '正常'}</div>
+                                            </div>
                                         </div>
-                                        <div className="nameAndOther">
-                                            <div className='userName'>{a.nickName}</div>
-                                            <div>在床{a.onBedTime}</div>
-                                            <div>风险:{a.stroke ? '危险' : '正常'}</div>
-                                        </div>
-                                    </div>
                                     </Link>
                                 </div>
                             </div>

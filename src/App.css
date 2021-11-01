@@ -43,3 +43,12 @@ a{
   text-decoration: none;
   color: white
 }
+
+@font-face {
+  font-family: 'font';
+  src: url('./assets/font/苹方-简.ttf');
+}
+
+.font{
+  font-family: 'font';
+}

@@ -194,7 +194,7 @@ function Particles(props) {
   let timer2 = null // 结束时候用的定时器
   let fSmooth = 0, LSmooth = 0
   useFrame(() => {
-    console.log(wsPointData)
+
 
     let res = Compute.computeAll(bigArrg, 144, 72);
     computeResult = res;
@@ -269,7 +269,7 @@ function Particles(props) {
         }
       }
       //attrib.current.needsUpdate = true;
-      console.info(wsPointData)
+
       //  console.info(mesh.rotation.x);
       //  mesh.rotation.y = mesh.rotation.y += 0.01;
       attrib.current.parent.attributes.position.needsUpdate = true;
@@ -467,13 +467,14 @@ class Anta extends React.Component {
     if (localStorage.getItem('id')) {
       let moveSmooth = 0
       // ws = new WebSocket('wss://sensor.bodyta.com/bed/' + localStorage.getItem('id'));
-      ws = new WebSocket('ws://127.0.0.1:9999/sensor/1')
+      // ws = new WebSocket('ws://sensor.bodyta.com/:8888/sensor/1')
+      ws = new WebSocket('wss://sensor.bodyta.com/bed/' + '1c9dc2da3338');
       ws.onopen = () => {
         // connection opened
         console.info('connect success');
       };
       ws.onmessage = (e) => {
-
+        console.log(e)
         let num = 0
         lastWsArr = []
         let arr
@@ -486,11 +487,12 @@ class Anta extends React.Component {
           wsPointData = addSide(wsPointData1, 32, 32, 2)
           let bedFetchData1 = bedStick1.dataStable(jsonObject.bodytaMove)
           let bedFetchData2 = bedStick2.dataStable(jsonObject.breath)
+          console.log(bedFetchData2)
           let bedFetchData3 = jsonObject.leaveBed
           let bedFetchData4 = jsonObject.breathPause
           // this.bedFetchData1.current.children[0].style = 'unset' 
           if (oldBedFetchData4 != bedFetchData4) {
-            // this.breathPause.current.innerHTML = bedFetchData4
+            this.breathPause.current.innerHTML = bedFetchData4
           }
           if (oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 0) {
             this.bedFetchData1.current.children[1].style.display = 'unset'
@@ -1023,11 +1025,11 @@ class Anta extends React.Component {
                     </div>
                     <div className="trainInfo">
                       <div className="pronation footbgc " style={{ display: 'flex', flexDirection: 'row' }}>
-                        <div class='flexcenter' style={{ flex: 1, borderRightWidth: 2, borderRight: 'solid black' }} >
+                        <div className='flexcenter' style={{ flex: 1, borderRightWidth: 2, borderRight: 'solid black' }} >
                           <div className="pronationText whiteColor flexTitle">中风预警</div>
                           <div className="pronationInfo textGradeColor iconText" style={{ fontSize: this.state.windowWidth > 768 ? '30px' : '20px' }} ref={this.stroke} >正常</div>
                         </div>
-                        <div class='flexcenter' style={{ flex: 1 }}>
+                        <div className='flexcenter' style={{ flex: 1 }}>
                           <div className="pronationText whiteColor flexTitle">呼吸暂停</div>
                           <div className="pronationInfo textGradeColor iconText" style={{ fontSize: this.state.windowWidth > 768 ? '30px' : '20px' }} ref={this.breathPause}>正常</div>
                         </div>

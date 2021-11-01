@@ -1,13 +1,121 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Img from '../../assets/img/a.jpeg'
 import './user.css'
 import System from '../antapage/AntaCanvasFull32-64 copy'
 import Sleep from './sleep/Sleep1'
 import History from './history/History'
+import axios from 'axios'
+import md5 from 'js-md5'
+import * as echarts from 'echarts'
+import { computeData1, } from './sleep/Chart'
+
+const createUrl = 'http://bah.bodyta.com:19356/rec/report'
+const historyUrl = 'https://bah.bodyta.com/rec/mark'
+const key = '13a43a4fd27e4b9e8acee7b82c11e27c'
+const timestamp = Date.parse(new Date()) / 1000
+const year = new Date().getFullYear()
+const month = new Date().getMonth() + 1
+const day = new Date().getDate()
+const date = `${year}-${month}-${day}`
+const deviceId = '474887766'
+const dateStr = '2021-10-14'
+
+function dateStr1(date) {
+    const year = new Date(date).getFullYear()
+    const month = new Date(date).getMonth() + 1
+    const day = new Date(date).getDate()
+    return `${year}-${month}-${day}`
+}
+
+function timeToNum(time) {
+    let numArr = time.split(':')
+    return Number(numArr[0]) * 60 + Number(numArr[1])
+}
+
 
 const stateItem = ['实时状态', '睡眠报告', '历史报告']
 export default function User() {
-    const [state, setState] = useState(1)
+    const [state, setState] = useState(0)
+
+    const [data, setData] = useState({})
+    const [chart1, setChart1] = useState()
+    const [chart2X, setChart2X] = useState()
+    const [chart2Y, setChart2Y] = useState()
+    const [chart3Y, setChart3Y] = useState()
+    const [chart4X, setChart4X] = useState()
+    const [chart4Y, setChart4Y] = useState()
+    const [chart5Y, setChart5Y] = useState()
+    useEffect(() => {
+        // var chart1 = document.getElementById('chart1');
+        // 
+
+        // 当天数据请求
+        axios.post(createUrl, {
+            sign: md5(key + timestamp),
+            timestamp: timestamp,
+            did: deviceId,
+            date: dateStr ? dateStr : date
+        })
+            .then((res) => {
+                const data = res.data.data[0]
+                console.log(res.data.data[0])
+                setData(res.data.data[0])
+
+
+                // 雷达图
+                let chart1Data = computeData1(data.total_duration, data.outbed.n, data.outbed.n, data.deep_duration / data.total_duration, data.sleep_time.split(':')[0])
+                setChart1(chart1Data)
+
+                // 呼吸图
+                let xdata = data.dt_arr, ydata = data.hx_arr
+                setChart2X(xdata)
+                setChart2Y(ydata)
+
+                // 体位转动
+                let postData = []
+
+                for (let i = 0; i < data.posture_arr.length; i++) {
+
+                    if (data.posture_arr[i] == '平躺') {
+                        postData.push(0)
+                    } else if (data.posture_arr[i] == '趴睡') {
+                        postData.push(1)
+                    } else if (data.posture_arr[i] == '侧躺') {
+                        postData.push(2)
+                    }
+                }
+                setChart3Y(postData)
+
+            })
+
+        // 请求历史数据
+        axios.post(historyUrl, {
+            sign: md5(key + timestamp),
+            timestamp: timestamp,
+            start_date: dateStr1(Date.parse(new Date()) - 16 * 24 * 3600 * 1000),
+            end_date: dateStr1(Date.parse(new Date()) - 10 * 24 * 3600 * 1000),
+            did: deviceId,
+        })
+            .then((res) => {
+                const data = res.data.data
+                console.log(res)
+
+                
+                let daArr = []
+                res.data.data.dt_arr.forEach((a, index) => {
+                    let b = a.split('-')
+                    daArr.push(`${b[1]}-${b[2]}`)
+                })
+                let duration_arr1 = res.data.data.duration_arr.map((a) => (timeToNum(a) / 60).toFixed(1))
+
+                setChart4X(daArr)
+                setChart4Y(data.score_arr)
+                
+                setChart5Y(duration_arr1)
+
+            })
+    }, [])
+
     return (
         <div className="userPage">
             <div className="userInfos boxShadow">
@@ -65,7 +173,7 @@ export default function User() {
                     {
                         stateItem.map((item, index) => {
                             return (
-                                <div className="userTitleItem" style={{ backgroundColor: state == index ? '#91cff3' : 'unset' ,     color: state == index ? '#fff' : 'unset' }}  onClick={() => { setState(index) }}>
+                                <div className="userTitleItem" key={item} style={{ backgroundColor: state == index ? '#91cff3' : 'unset' ,     color: state == index ? '#fff' : '#aaa' }}  onClick={() => { setState(index) }}>
                                     <div className="userTitleItemBorder">
                                         <div className='userTitleItemBox' > {item}</div>
                                     </div>
@@ -75,7 +183,12 @@ export default function User() {
                     }
                 </div>
                 <div className="userContent">
-                    {state == 0 ? <System /> : state == 1 ? <Sleep /> : <History />}
+                    {/* {state == 0 ? <System /> : state == 1 ? <div><Sleep /></div>  : <div> <History /></div>} */}
+                    <div style={{visibility : state == 0 ? 'unset' : 'hidden' , position : 'absolute'  , width : '100%', height : '100%'}}><System /></div>
+                    <div style={{visibility : state == 1 ? 'unset' : 'hidden', position : 'absolute', width : '100%', height : '100%'}}>
+                        <Sleep chart1={chart1} chart2X={chart2X} chart2Y={chart2Y} chart3Y={chart3Y} data={data} />
+                        </div> 
+                    <div style={{visibility : state == 2 ? 'unset' : 'hidden', position : 'absolute', width : '100%', height : '100%'}}> <History chart1={chart1} chart4X={chart4X} chart4Y={chart4Y} chart5Y={chart5Y} data={data} /></div>
                 </div>
             </div>
         </div>
