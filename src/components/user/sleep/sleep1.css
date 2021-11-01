@@ -119,6 +119,7 @@
     /* align-items: center; */
     flex-direction: column;
     padding: 10px;
+    font-size: 10px;
 }
 .item3Content{
    
@@ -193,7 +194,7 @@
     width: 10px;
     height: 10px;
     border-radius: 5px;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 .segSleepTitles{
     font-size: 18px;

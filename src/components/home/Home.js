@@ -298,7 +298,7 @@ export default function Home() {
                                     <Link to={`/${a.deviceId}`}>
                                         <div className="homeInfo">
                                             <div className="homeImg">
-                                                <img src={a.img} alt="" />
+                                                <img src={ticks[index]} alt="" />
                                             </div>
                                             <div className="nameAndOther">
                                                 <div className='userName'>{a.nickName}</div>
