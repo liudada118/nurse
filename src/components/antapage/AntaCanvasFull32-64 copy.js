@@ -558,7 +558,7 @@ class Anta extends React.Component {
         } else {
           this.bedFetchData1.current.innerHTML = '正常'
         }
-          (reduce,'reduce')
+          // (reduce,'reduce')
         this.initCharts({ yData: reduce.stack, xData: [], index: 0 + 1, name: '中风', myChart: myChart1, })
 
 
