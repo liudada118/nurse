@@ -325,7 +325,7 @@ height: 80%;
     z-index: 20;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1380px) {
     .inputCard{
         display: flex;
         padding: 80px 160px;
@@ -345,6 +345,65 @@ height: 80%;
     }
     .whiteColor{
         font-size: 24px;
+    }
+    .cordProgress{
+        width: 24px;
+        border-radius: 12px;
+    }
+    .cordProgressAddress{
+        width: 24px;
+    }
+    .footProgressAddress{
+        height: 24px;
+    }
+    .footProgress{
+        height: 24px;
+        border-radius: 12px;
+    }
+    .cordProgressAddress{
+        border-radius:  12px;
+    }
+    .footProgressAddress{
+        border-radius: 12px;
+    }
+    .pronationInfo {
+        font-size: 30px!important;
+    }
+    .leg.textGradeColor{
+        font-size: 28px;
+    }
+    .item1{
+        flex: 0 0 32.5%;
+    }
+    .item2{
+        flex: 0 0 32.5%;
+    }
+    .item3{
+        flex: 0 0 32.5%;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    
+    .inputCard{
+        display: flex;
+        padding: 80px 160px;
+        background-color: rgb(16, 21, 43);
+        border-radius: 20px;
+        z-index: 20;
+    }
+    .textGradeColor{
+        font-size: 36px;
+    }
+    .content {
+        right: 0;
+        top: 0;
+        width: 35%;
+        height: 100%;
+        left: unset;
+    }
+    .whiteColor{
+        font-size : 20px;
     }
     .cordProgress{
         width: 24px;

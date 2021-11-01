@@ -5,7 +5,7 @@ import { Modal, Input, Select } from 'antd'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 // import { obj } from '../../assets/js/ws'
-const demoImgArr = ["a", "b", "c", 'd', 'e', 'f', 'g', 'h']
+const demoImgArr = [ "b", "c", 'd', 'e', 'f', 'g', 'h']
 const ticks = demoImgArr.map(item => require("../../assets/img/" + item + ".jpeg"))
 console.log(ticks)
 
@@ -109,25 +109,25 @@ export default function Home() {
         if (value == 'id') {
             setId(e.target.value)
         }
-        if (value == 'deviceId') {
+        if (value == '设备Id') {
             setDeviceId(e.target.value)
         }
-        if (value == 'nickName') {
+        if (value == '名字') {
             setNickName(e.target.value)
         }
-        if (value == 'headImg') {
+        if (value == '头像') {
             setHeadImg(e.target.value)
         }
-        if (value == 'roomId') {
+        if (value == '房间号') {
             setRoomId(e.target.value)
         }
-        if (value == 'age') {
+        if (value == '年龄') {
             setAge(e.target.value)
         }
-        if (value == 'gender') {
+        if (value == '性别') {
             setGender(e.target.value)
         }
-        if (value == 'introduce') {
+        if (value == '介绍') {
             setIntroduce(e.target.value)
         }
     }

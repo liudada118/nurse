@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react'
-import Img from '../../assets/img/a.jpeg'
+import Img from '../../assets/img/a.jpg'
 import './user.css'
 import System from '../antapage/AntaCanvasFull32-64 copy'
 import Sleep from './sleep/Sleep1'
