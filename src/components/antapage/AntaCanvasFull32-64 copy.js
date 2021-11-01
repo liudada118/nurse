@@ -147,7 +147,7 @@ const Box = props => {
 
 let a = false
 function Particles(props) {
-  console.log(props)
+
   const spite = new TextureLoader().load(require('../../assets/images/circle.png'));
   const attrib = useRef();
 
@@ -249,7 +249,7 @@ function Particles(props) {
           //   value =fixbigArrg[j]
           // }
           // const value = props.props.match.params.step === 3 ? printArr[j] : fixbigArrg[j]
-          // console.log(props.props.match.params.step === 3)
+        
           // const value = bigArr[j]/10;
           //const  value= (Math.sin((ix + count) * 0.3) + 1) * 20 +
 
@@ -462,7 +462,7 @@ class Anta extends React.Component {
 
     myChart1 = echarts.init(document.getElementById(`myChart1`));
     // moveArr = [1,2,3,4,5]
-    // console.log(moveArr,myChart1)
+    
     // this.initCharts({ yData : moveArr, xData :dateArr,   index: 0 + 1, name: 0, myChart: myChart1, })
 
     // if (localStorage.getItem('id')) {
@@ -475,7 +475,7 @@ class Anta extends React.Component {
         console.info('connect success');
       };
       ws.onmessage = (e) => {
-        console.log(e)
+
         let num = 0
         lastWsArr = []
         let arr
@@ -484,7 +484,7 @@ class Anta extends React.Component {
         
         
         if (jsonObject.data != null) {
-          console.log(jsonObject.data , 'data')
+   
           if(jsonObject.data.length != 1024){
             return
           }
@@ -493,7 +493,7 @@ class Anta extends React.Component {
           wsPointData = addSide(wsPointData1, 32, 32, 2)
           let bedFetchData1 = bedStick1.dataStable(jsonObject.bodytaMove)
           let bedFetchData2 = bedStick2.dataStable(jsonObject.breath)
-          console.log(bedFetchData2)
+     
           let bedFetchData3 = jsonObject.leaveBed
           let bedFetchData4 = jsonObject.breathPause
           // this.bedFetchData1.current.children[0].style = 'unset' 
@@ -538,10 +538,9 @@ class Anta extends React.Component {
           oldBedFetchData3 = bedFetchData3
           oldBedFetchData4 = bedFetchData4
 
-          
-        console.log(jsonObject.data.every((item) => typeof item == 'number') , 'number')
+
         let leftAndRight = computeStoke([...jsonObject.data], [...oldWsData], 32, 32)
-        console.log(leftAndRight,'leftAndRight')
+     
       
         let left = leftAndRight[0]
         let right = leftAndRight[1]
@@ -559,7 +558,7 @@ class Anta extends React.Component {
         } else {
           this.bedFetchData1.current.innerHTML = '正常'
         }
-        console.log(reduce)
+        console.log(reduce,'reduce')
         this.initCharts({ yData: reduce.stack, xData: [], index: 0 + 1, name: '中风', myChart: myChart1, })
 
 
