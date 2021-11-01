@@ -465,7 +465,7 @@ class Anta extends React.Component {
     // console.log(moveArr,myChart1)
     // this.initCharts({ yData : moveArr, xData :dateArr,   index: 0 + 1, name: 0, myChart: myChart1, })
 
-    if (localStorage.getItem('id')) {
+    // if (localStorage.getItem('id')) {
       let moveSmooth = 0
       // ws = new WebSocket('wss://sensor.bodyta.com/bed/' + localStorage.getItem('id'));
       // ws = new WebSocket('ws://sensor.bodyta.com/:8888/sensor/1')
@@ -481,8 +481,13 @@ class Anta extends React.Component {
         let arr
         let jsonObject = JSON.parse(e.data);
         //处理空数组
-
+        
+        
         if (jsonObject.data != null) {
+          console.log(jsonObject.data , 'data')
+          if(jsonObject.data.length != 1024){
+            return
+          }
           wsPointData1 = jsonObject.data;
           wsPointData1 = wsPointData1.map((a) => { if (a < this.state.fliter) { return 0 } else { return a } })
           wsPointData = addSide(wsPointData1, 32, 32, 2)
@@ -514,7 +519,7 @@ class Anta extends React.Component {
           }
           // moveArr = [1,2,3,4,5]
 
-          this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
+          // this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
 
           if (oldBedFetchData2 != bedFetchData2) {
             this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
@@ -532,6 +537,36 @@ class Anta extends React.Component {
           oldBedFetchData2 = bedFetchData2
           oldBedFetchData3 = bedFetchData3
           oldBedFetchData4 = bedFetchData4
+
+          
+        console.log(jsonObject.data.every((item) => typeof item == 'number') , 'number')
+        let leftAndRight = computeStoke([...jsonObject.data], [...oldWsData], 32, 32)
+        console.log(leftAndRight,'leftAndRight')
+      
+        let left = leftAndRight[0]
+        let right = leftAndRight[1]
+
+        leftStoke.addValue(left)
+        rightStoke.addValue(right)
+
+        let leftRes1 = leftStoke.computeValue(40)
+        let rightRes1 = rightStoke.computeValue(40)
+        reduce.addValue(Math.abs(leftRes1 - rightRes1))
+        console.log(leftRes1, rightRes1)
+
+        if ((leftRes1 >= 25 && rightRes1 < 10) || (rightRes1 >= 25 && leftRes1 < 10)) {
+          this.bedFetchData1.current.innerHTML = '危险'
+        } else {
+          this.bedFetchData1.current.innerHTML = '正常'
+        }
+        console.log(reduce)
+        this.initCharts({ yData: reduce.stack, xData: [], index: 0 + 1, name: '中风', myChart: myChart1, })
+
+
+        // this.footForm.current.innerHTML = `<div>left ${leftRes1}</div> <div>right ${rightRes1}</div>`
+        wsPointData = addSide(wsPointData, 32, 32, 2, 2)
+        oldWsData = [...jsonObject.data]
+
         } else {
           let bedFetchData3 = bedStick3.dataStable(jsonObject.predict)
           if (oldSleep != bedFetchData3) {
@@ -567,32 +602,7 @@ class Anta extends React.Component {
           this.pronation.current.innerHTML = parseInt(timeSum / 1000)
         }
         lastTimeSum = timeSum
-
-
-        let leftAndRight = computeStoke([...jsonObject.data], [...oldWsData], 32, 32)
-        let left = leftAndRight[0]
-        let right = leftAndRight[1]
-
-        leftStoke.addValue(left)
-        rightStoke.addValue(right)
-
-        let leftRes1 = leftStoke.computeValue(40)
-        let rightRes1 = rightStoke.computeValue(40)
-        reduce.addValue(Math.abs(leftRes1 - rightRes1))
-        console.log(leftRes1, rightRes1)
-
-        if ((leftRes1 >= 25 && rightRes1 < 10) || (rightRes1 >= 25 && leftRes1 < 10)) {
-          this.bedFetchData1.current.innerHTML = '危险'
-        } else {
-          this.bedFetchData1.current.innerHTML = '正常'
-        }
-        console.log(reduce)
-        this.initCharts({ yData: reduce.stack, xData: [], index: 0 + 1, name: '中风', myChart: myChart1, })
-
-
-        // this.footForm.current.innerHTML = `<div>left ${leftRes1}</div> <div>right ${rightRes1}</div>`
-        wsPointData = addSide(wsPointData, 32, 32, 2, 2)
-        oldWsData = [...jsonObject.data]
+        
 
 
 
@@ -603,7 +613,7 @@ class Anta extends React.Component {
       ws.onclose = (e) => {
         // connection closed
       };
-    }
+    // }
     // ws = new WebSocket('wss://sensor.bodyta.com/bed/f4cfa2969408');
 
 
