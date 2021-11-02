@@ -494,12 +494,30 @@ class Anta extends React.Component {
           if (oldBedFetchData4 != bedFetchData4) {
             // this.breathPause.current.innerHTML = bedFetchData4
           }
+          console.log(oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 0)
+          let ti
+          if(bedFetchData3 == 0){
+            console.log(111111)
+            if(!ti){
+              ti = setTimeout(() => {
+                this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
+                ti = null
+              },1000)
+            }
+            
+            
+          }else{
+            this.footForm.current.innerHTML = '--'
+          }
           if (oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 0) {
             this.bedFetchData1.current.children[1].style.display = 'unset'
             this.bedFetchData1.current.children[0].style.display = 'none'
+           
+            console.log(1111)
           } if (oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 1) {
             this.bedFetchData1.current.children[1].style.display = 'none'
             this.bedFetchData1.current.children[0].style.display = 'unset'
+            console.log(0)
           }
   
           if (moveArr.length < 100) {
@@ -518,7 +536,7 @@ class Anta extends React.Component {
           // if (oldBedFetchData2 != bedFetchData2) {
             // this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
           // }
-          // this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
+          
   
           oldBedFetchData1 = bedFetchData1
           oldBedFetchData2 = bedFetchData2
