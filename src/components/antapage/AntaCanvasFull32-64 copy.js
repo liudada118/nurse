@@ -31,7 +31,7 @@ let timeArr = []
 let lastTimeSum = 0
 let timeSum = 0
 const yMax = 255
-
+let ti
 let oldWsData = new Array(1024).fill(0)
 let leftStoke = new Stoke(50)
 let rightStoke = new Stoke(50)
@@ -495,14 +495,15 @@ class Anta extends React.Component {
             // this.breathPause.current.innerHTML = bedFetchData4
           }
           console.log(oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 0)
-          let ti
+
           if(bedFetchData3 == 0){
             console.log(111111)
             if(!ti){
+              console.log(2222)
               ti = setTimeout(() => {
                 this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
                 ti = null
-              },1000)
+              },2000)
             }
             
             
