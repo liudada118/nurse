@@ -518,7 +518,7 @@ class Anta extends React.Component {
           // if (oldBedFetchData2 != bedFetchData2) {
             // this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
           // }
-          this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
+          // this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
   
           oldBedFetchData1 = bedFetchData1
           oldBedFetchData2 = bedFetchData2
