@@ -481,24 +481,18 @@ class Anta extends React.Component {
         let arr
         let jsonObject = JSON.parse(e.data);
         //处理空数组
-        
-        
+  
         if (jsonObject.data != null) {
-   
-          if(jsonObject.data.length != 1024){
-            return
-          }
           wsPointData1 = jsonObject.data;
           wsPointData1 = wsPointData1.map((a) => { if (a < this.state.fliter) { return 0 } else { return a } })
           wsPointData = addSide(wsPointData1, 32, 32, 2)
           let bedFetchData1 = bedStick1.dataStable(jsonObject.bodytaMove)
           let bedFetchData2 = bedStick2.dataStable(jsonObject.breath)
-     
           let bedFetchData3 = jsonObject.leaveBed
           let bedFetchData4 = jsonObject.breathPause
           // this.bedFetchData1.current.children[0].style = 'unset' 
           if (oldBedFetchData4 != bedFetchData4) {
-            this.breathPause.current.innerHTML = bedFetchData4
+            // this.breathPause.current.innerHTML = bedFetchData4
           }
           if (oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 0) {
             this.bedFetchData1.current.children[1].style.display = 'unset'
@@ -507,7 +501,7 @@ class Anta extends React.Component {
             this.bedFetchData1.current.children[1].style.display = 'none'
             this.bedFetchData1.current.children[0].style.display = 'unset'
           }
-
+  
           if (moveArr.length < 100) {
             moveSmooth = moveSmooth + (jsonObject.bodytaMove - moveSmooth) / 10
             moveArr.push(moveSmooth > yMax ? yMax : moveSmooth)
@@ -518,54 +512,18 @@ class Anta extends React.Component {
             moveArr.push(moveSmooth > yMax ? yMax : moveSmooth)
           }
           // moveArr = [1,2,3,4,5]
-
-          // this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
-
-          if (oldBedFetchData2 != bedFetchData2) {
-            this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
-          }
-          // let newTime = new Date().getTime()
-          // if (parseInt((newTime - oldTime)/1000) / 2) {
-          //   if (change) {
-          //     change = false
-          //     this.footForm.current.innerHTML = Math.floor(14 + Math.random() * 3)
-          //     setTimeout(() =>{change = true} , 1500 )
-          //   }
+  
+          this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
+  
+          // if (oldBedFetchData2 != bedFetchData2) {
+            // this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
           // }
-
+          this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
+  
           oldBedFetchData1 = bedFetchData1
           oldBedFetchData2 = bedFetchData2
           oldBedFetchData3 = bedFetchData3
           oldBedFetchData4 = bedFetchData4
-
-
-        let leftAndRight = computeStoke([...jsonObject.data], [...oldWsData], 32, 32)
-     
-      
-        let left = leftAndRight[0]
-        let right = leftAndRight[1]
-
-        leftStoke.addValue(left)
-        rightStoke.addValue(right)
-
-        let leftRes1 = leftStoke.computeValue(40)
-        let rightRes1 = rightStoke.computeValue(40)
-        reduce.addValue(Math.abs(leftRes1 - rightRes1))
-        console.log(leftRes1, rightRes1)
-
-        if ((leftRes1 >= 25 && rightRes1 < 10) || (rightRes1 >= 25 && leftRes1 < 10)) {
-          this.bedFetchData1.current.innerHTML = '危险'
-        } else {
-          this.bedFetchData1.current.innerHTML = '正常'
-        }
-          // (reduce,'reduce')
-        this.initCharts({ yData: reduce.stack, xData: [], index: 0 + 1, name: '中风', myChart: myChart1, })
-
-
-        // this.footForm.current.innerHTML = `<div>left ${leftRes1}</div> <div>right ${rightRes1}</div>`
-        wsPointData = addSide(wsPointData, 32, 32, 2, 2)
-        oldWsData = [...jsonObject.data]
-
         } else {
           let bedFetchData3 = bedStick3.dataStable(jsonObject.predict)
           if (oldSleep != bedFetchData3) {
@@ -573,10 +531,10 @@ class Anta extends React.Component {
           }
           oldSleep = bedFetchData3
         }
-
-
+  
+  
         let wsSum = wsPointData1.reduce((a, b) => a + b, 0)
-
+  
         if (timeArr.length < 2) {
           timeArr.push({
             num: wsSum > 350 ? 1 : 0,
@@ -601,10 +559,11 @@ class Anta extends React.Component {
           this.pronation.current.innerHTML = parseInt(timeSum / 1000)
         }
         lastTimeSum = timeSum
-        
-
-
-
+  
+  
+  
+  
+  
       };
       ws.onerror = (e) => {
         // an error occurred
@@ -626,7 +585,7 @@ class Anta extends React.Component {
     this.drop = React.createRef();
     this.num = React.createRef();
     this.state = {
-      fliter: 50,
+      fliter: 100,
       IDArr: [],
       ID: '',
       show: false,
@@ -726,119 +685,8 @@ class Anta extends React.Component {
     if (ws) {
       ws.close();
     }
-    ws = new WebSocket('wss://sensor.bodyta.com/bed/' + this.state.ID);
-    ws.onopen = () => {
-      // connection opened
-      console.info('connect success');
-    };
-    let moveSmooth = 0
-    ws.onmessage = (e) => {
-
-      let num = 0
-      lastWsArr = []
-      let arr
-      let jsonObject = JSON.parse(e.data);
-      //处理空数组
-
-      if (jsonObject.data != null) {
-        wsPointData1 = jsonObject.data;
-        wsPointData1 = wsPointData1.map((a) => { if (a < this.state.fliter) { return 0 } else { return a } })
-        wsPointData = addSide(wsPointData1, 32, 32, 2)
-        let bedFetchData1 = bedStick1.dataStable(jsonObject.bodytaMove)
-        let bedFetchData2 = bedStick2.dataStable(jsonObject.breath)
-        let bedFetchData3 = jsonObject.leaveBed
-        let bedFetchData4 = jsonObject.breathPause
-        // this.bedFetchData1.current.children[0].style = 'unset' 
-        if (oldBedFetchData4 != bedFetchData4) {
-          // this.breathPause.current.innerHTML = bedFetchData4
-        }
-        if (oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 0) {
-          this.bedFetchData1.current.children[1].style.display = 'unset'
-          this.bedFetchData1.current.children[0].style.display = 'none'
-        } if (oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 1) {
-          this.bedFetchData1.current.children[1].style.display = 'none'
-          this.bedFetchData1.current.children[0].style.display = 'unset'
-        }
-
-        if (moveArr.length < 100) {
-          moveSmooth = moveSmooth + (jsonObject.bodytaMove - moveSmooth) / 10
-          moveArr.push(moveSmooth > yMax ? yMax : moveSmooth)
-          dateArr.push(new Date().getTime())
-        } else {
-          moveArr.shift()
-          moveSmooth = moveSmooth + (jsonObject.bodytaMove - moveSmooth) / 10
-          moveArr.push(moveSmooth > yMax ? yMax : moveSmooth)
-        }
-        // moveArr = [1,2,3,4,5]
-
-        // this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
-
-        if (oldBedFetchData2 != bedFetchData2) {
-          this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
-        }
-        // let newTime = new Date().getTime()
-        // if (parseInt((newTime - oldTime)/1000) / 2) {
-        //   if (change) {
-        //     change = false
-        //     this.footForm.current.innerHTML = Math.floor(14 + Math.random() * 3)
-        //     setTimeout(() =>{change = true} , 1500 )
-        //   }
-        // }
-
-
-
-        oldBedFetchData1 = bedFetchData1
-        oldBedFetchData2 = bedFetchData2
-        oldBedFetchData3 = bedFetchData3
-        oldBedFetchData4 = bedFetchData4
-      } else {
-        let bedFetchData3 = bedStick3.dataStable(jsonObject.predict)
-        if (oldSleep != bedFetchData3) {
-          this.train.current.innerHTML = bedFetchData3 == '平躺' ? '平躺' : '侧睡'
-        }
-        oldSleep = bedFetchData3
-      }
-
-
-      let wsSum = wsPointData1.reduce((a, b) => a + b, 0)
-
-      if (timeArr.length < 2) {
-        timeArr.push({
-          num: wsSum > 350 ? 1 : 0,
-          time: new Date().getTime(),
-        })
-      } else {
-        timeArr.shift()
-        timeArr.push({
-          num: wsSum > 350 ? 1 : 0,
-          time: new Date().getTime(),
-        })
-      }
-      if (timeArr.every((a, index) => a.num == 1) && timeArr.length == 2) {
-        timeSum += timeArr[1].time - timeArr[0].time
-      }
-      // this.setState({
-      //     time: parseInt(timeSum / 1000)
-      // })
-      if (parseInt(lastTimeSum / 1000) != parseInt(timeSum / 1000)) {
-        // this.setState({
-        //   time : parseInt(timeSum / 1000)})
-        this.pronation.current.innerHTML = parseInt(timeSum / 1000)
-      }
-      lastTimeSum = timeSum
-
-
-
-
-
-    };
-    ws.onerror = (e) => {
-      // an error occurred
-    };
-    ws.onclose = (e) => {
-      // connection closed
-      console.log('closed')
-    };
+    
+   
   }
 
   setID(e) {
@@ -1095,3 +943,10 @@ class Anta extends React.Component {
 }
 
 export default Anta;
+
+
+
+
+
+
+
