@@ -484,7 +484,7 @@ class Anta extends React.Component {
   
         if (jsonObject.data != null) {
           wsPointData1 = jsonObject.data;
-          wsPointData1 = wsPointData1.map((a) => { if (a < this.state.fliter) { return 0 } else { return a } })
+          wsPointData1 = wsPointData1.map((a) => { if (a < 20) { return 0 } else { return a } })
           wsPointData = addSide(wsPointData1, 32, 32, 2)
           let bedFetchData1 = bedStick1.dataStable(jsonObject.bodytaMove)
           let bedFetchData2 = bedStick2.dataStable(jsonObject.breath)
