@@ -1,0 +1,17 @@
+
+.swiper-slide{
+    transform: scale(0.8)
+}
+.swiper-slide-active, .swiper-slide-duplicate-active{
+    transform: scale(1);
+    
+}
+
+.swiper-slide-active .slideImg, .swiper-slide-duplicate-active .slideImg{
+    background: linear-gradient(to right, #5cadd1 , #7ac7c5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+

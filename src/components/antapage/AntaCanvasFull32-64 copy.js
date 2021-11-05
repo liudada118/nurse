@@ -469,7 +469,8 @@ class Anta extends React.Component {
       let moveSmooth = 0
       // ws = new WebSocket('wss://sensor.bodyta.com/bed/' + localStorage.getItem('id'));
       // ws = new WebSocket('ws://sensor.bodyta.com/:8888/sensor/1')
-      ws = new WebSocket('wss://sensor.bodyta.com/bed/' + '1c9dc2da3338');
+      ws = new WebSocket('wss://sensor.bodyta.com/bed/' + '34ab95f5eb20');
+      // ws = new WebSocket('ws://127.0.0.1:9999')
       ws.onopen = () => {
         // connection opened
         console.info('connect success');

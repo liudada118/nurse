@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState,forwardRef } from 'react'
 import { Chart1, Chart4, Chart5 } from '../sleep/Chart1'
 import './history.css'
 import { Progress } from 'antd';
-export default function History(props) {
+export const  History = forwardRef((props ,ref) => {
     function dateStr1(date) {
         const year = new Date(date).getFullYear()
         const month = new Date(date).getMonth() + 1
@@ -13,7 +13,7 @@ export default function History(props) {
     const [date, setDate] = useState(Date.parse(new Date()))
     return (
         <>{
-            Object.keys(props.data).length > 0 ? <div className="historySleep">
+            Object.keys(props.data).length > 0 ? <div className="historySleep" ref={ref}>
                 <div className="historyItem1">
                     <div className="historyItem cardRight">
                         <div className="cardItemTitle">
@@ -119,4 +119,4 @@ export default function History(props) {
             </div> : null
         }</>
     )
-}
+})

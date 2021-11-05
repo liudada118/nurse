@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef,forwardRef } from 'react'
 import './sleep1.css'
 import axios from 'axios'
 import md5 from 'js-md5'
@@ -39,13 +39,13 @@ const segSleep = [
 ]
 
 
-export default function Sleep(props) {
-    
+export const  Sleep = React.forwardRef((props,ref) => {
 
 
     return (
         <>
-            {Object.keys(props.data).length > 0 ? <div className='sleepReport'>
+            {Object.keys(props.data).length > 0 ? <div className='sleepReport' ref={ref} >
+            
                 <div className="sleepItem1">
                     <div className="card cardRight boxShadow">
                         <div className="cardItemTitle">睡眠得分</div>
@@ -240,3 +240,4 @@ export default function Sleep(props) {
         </>
     )
 }
+)

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import './home.css'
 import 'antd/dist/antd.css'
-import { Modal, Input, Select } from 'antd'
+import { Modal, Input, Select, message, Radio, Button } from 'antd'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import HeadImgSelect from '../headImgSelect/HeadImgSelect'
+import { imgArr } from '../headImgSelect/HeadImgSelect'
 // import { obj } from '../../assets/js/ws'
-const demoImgArr = [ "b", "c", 'd', 'e', 'f', 'g', 'h']
+const demoImgArr = ["b", "c", 'd', 'e', 'f', 'g', 'h']
 const ticks = demoImgArr.map(item => require("../../assets/img/" + item + ".jpeg"))
 console.log(ticks)
 
@@ -44,7 +46,7 @@ export default function Home() {
     const [headImg, setHeadImg] = useState('')
     const [roomId, setRoomId] = useState('')
     const [age, setAge] = useState('')
-    const [gender, setGender] = useState('')
+    const [gender, setGender] = useState(0)
     const [introduce, setIntroduce] = useState('')
     const [devicedArr, setDevicedArr] = useState([])
     const showEditModal = (data) => {
@@ -59,10 +61,58 @@ export default function Home() {
         setIsEditVisible(true);
     };
     const handleEditOk = () => {
-        setIsEditVisible(false);
+
         console.log(id)
         axios.post(`http://sensor.bodyta.com:8888/insure/update?id=${id}&nickName=${nickName}&headImg=${headImg}&deviceId=${deviceId}&roomId=${roomId}&age=${age}&gender=${gender}&introduce=${introduce}`)
             .then((res) => {
+                if (res.data.msg == 'success') {
+                    message.success('修改成功');
+                    setIsEditVisible(false);
+                    axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
+                        .then((res) => {
+                            console.log(res.data.data)
+                            setUserArr(res.data.data)
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                } else {
+                    message.error('网络错误');
+                }
+
+            }).catch(err =>{
+                message.error('网络错误');
+            })
+    };
+    const handleEditCancel = () => {
+
+        // axios.post(`http://sensor.bodyta.com:8888/insure/deleteBed?id=${id}`).then((res) => {
+        //     if(res.data.msg == 'success'){
+        //         message.success('删除成功');
+        //         setIsEditVisible(false);
+        //         axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
+        //         .then((res) => {
+        //             console.log(res.data.data)
+        //             setUserArr(res.data.data)
+        //         }).catch(err => {
+        //             console.log(err)
+        //         })
+        //     }else{
+        //         message.error('网络错误');
+        //     }
+
+
+
+        // }).catch(err => console.log(err))
+
+
+        setIsEditVisible(false);
+    };
+
+    const handleDelete = () => {
+        axios.post(`http://sensor.bodyta.com:8888/insure/deleteBed?id=${id}`).then((res) => {
+            if (res.data.msg == 'success') {
+                message.success('删除成功');
+                setIsEditVisible(false);
                 axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
                     .then((res) => {
                         console.log(res.data.data)
@@ -70,11 +120,16 @@ export default function Home() {
                     }).catch(err => {
                         console.log(err)
                     })
-            })
-    };
-    const handleEditCancel = () => {
-        setIsEditVisible(false);
-    };
+            } else {
+                message.error('网络错误');
+            }
+
+
+
+        }).catch(err => {
+            message.error('网络错误');
+        })
+    }
 
     const showAddModal = () => {
         setIsAddVisible(true);
@@ -88,24 +143,37 @@ export default function Home() {
         setIntroduce('')
     };
     const handleAddOk = () => {
-        setIsAddVisible(false);
-        axios.post(`http://sensor.bodyta.com:8888/insure/insertBed?nickName=${nickName}&headImg=${headImg}&deviceId=${deviceId}&roomId=${roomId}&age=${age}&gender=${gender}&introduce=${introduce}`)
-            .then(() => {
-                axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
-                    .then((res) => {
-                        console.log(res.data.data)
-                        setUserArr(res.data.data)
-                    }).catch(err => {
-                        console.log(err)
-                    })
+        if([nickName , deviceId,roomId].every ( a => a!='')){
+            axios.post(`http://sensor.bodyta.com:8888/insure/insertBed?nickName=${nickName}&headImg=${headImg}&deviceId=${deviceId}&roomId=${roomId}&age=${age}&gender=${gender}&introduce=${introduce}`)
+            .then((res) => {
+                if (res.data.msg == 'success') {
+                    setIsAddVisible(false);
+                    message.success('添加成功');
+                    axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
+                        .then((res) => {
+                            console.log(res.data.data)
+                            setUserArr(res.data.data)
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                } else {
+                    message.error('网络错误');
+                }
+
+            }).catch(err => {
+                message.error('网络错误');
             })
+        }else{
+            message.error(`${nickName == '' ? '名字' : ''} ${deviceId == '' ? '设备' : ''} ${roomId == '' ? '房间号' : ''}不能为空`);
+        }
+        
     };
     const handleAddCancel = () => {
         setIsAddVisible(false);
     };
 
     const changeValue = (e, value) => {
-        console.log(value)
+        console.log(e, value)
         if (value == 'id') {
             setId(e.target.value)
         }
@@ -116,7 +184,7 @@ export default function Home() {
             setNickName(e.target.value)
         }
         if (value == '头像') {
-            setHeadImg(e.target.value)
+            setHeadImg(Number(e))
         }
         if (value == '房间号') {
             setRoomId(e.target.value)
@@ -134,6 +202,9 @@ export default function Home() {
 
     function onChange(value) {
         setDeviceId(value)
+    }
+    function onChangeGender(e) {
+        setGender(e.target.value)
     }
 
     function onBlur() {
@@ -168,9 +239,7 @@ export default function Home() {
             })
     }, [])
     const editList = [
-        { label: 'id', value: id },
         { label: '名字', value: nickName },
-        { label: '头像', value: headImg },
         { label: '设备Id', value: deviceId },
         { label: '房间号', value: roomId },
         { label: '年龄', value: age },
@@ -179,7 +248,6 @@ export default function Home() {
     ]
     const addList = [
         { label: '名字', value: nickName },
-        { label: '头像', value: headImg },
         { label: '设备Id', value: deviceId },
         { label: '房间号', value: roomId },
         { label: '年龄', value: age },
@@ -188,19 +256,45 @@ export default function Home() {
     ]
     return (
         <>
-            <Modal title="编辑" visible={isEditVisible} okText={'确定'} cancelText={'取消'} onOk={handleEditOk} onCancel={handleEditCancel}>
+            <Modal title="编辑"
+                visible={isEditVisible}
+                okText={'确定'}
+                cancelText={'取消'}
+                onOk={handleEditOk}
+                onCancel={handleEditCancel}
+                footer={[
+                    <Button key="back" onClick={handleEditCancel}>
+                        取消
+                    </Button>,
+                    <Button key="delete" type="primary"
+                        onClick={handleDelete}>
+                        删除
+                    </Button>,
+                    <Button
+                        key="sure"
+                        type="primary"
+                        onClick={handleEditOk}
+                    >
+                        确认
+                    </Button>,
+                ]}
+            >
+                <HeadImgSelect changeValue={changeValue} index={headImg} />
                 {editList.map(item => {
                     return (
                         <div className='listItem' key={item.label}>
                             {
                                 <> <span className='listLabel'>{item.label}:</span>
-                                    {item.label == 'id'
-                                        ? <span>{item.value}</span>
-                                        : item.label == 'deviceId' ?
+                                    {item.label == '性别'
+                                        ? <Radio.Group onChange={onChangeGender} value={gender}>
+                                            <Radio value={0}>男</Radio>
+                                            <Radio value={1}>女</Radio>
+                                        </Radio.Group>
+                                        : item.label == '设备Id' ?
                                             <Select
                                                 showSearch
                                                 className='listInput'
-                                                placeholder="Select a devicedId"
+                                                placeholder="选择设备id"
                                                 optionFilterProp="children"
                                                 value={item.value}
                                                 onChange={onChange}
@@ -214,7 +308,7 @@ export default function Home() {
                                             >
                                                 {devicedArr.map((item, index) => {
                                                     return (
-                                                        <Option key={item} value={item.deviceId}>{item.deviceId}</Option>
+                                                        <Option key={item.deviceId} value={item.deviceId}>{item.deviceId}</Option>
                                                     )
                                                 })}
                                             </Select>
@@ -225,17 +319,23 @@ export default function Home() {
                 })}
             </Modal>
             <Modal title="添加" okText={'确定'} cancelText={'取消'} visible={isAddVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
+                <HeadImgSelect changeValue={changeValue} index={headImg} />
                 {addList.map(item => {
                     return (
                         <div className='listItem' key={item.label}>
-                            {item.label == 'deviceId'
+                            {item.label == '性别'
+                                        ? <> <span className='listLabel'>{item.label}:</span><Radio.Group onChange={onChangeGender} value={gender}>
+                                            <Radio value={0}>男</Radio>
+                                            <Radio value={1}>女</Radio>
+                                        </Radio.Group></>
+                                        : item.label == '设备Id'
                                 ? <>
                                     <span className='listLabel'>{item.label}:</span>
                                     <Select
                                         className='listInput'
                                         showSearch
-
-                                        placeholder="Select a devicedId"
+                                        value={deviceId}
+                                        placeholder="选择设备id"
                                         optionFilterProp="children"
                                         onChange={onChange}
                                         onFocus={onFocus}
@@ -247,7 +347,7 @@ export default function Home() {
                                     >
                                         {devicedArr.map((item, index) => {
                                             return (
-                                                <Option key={item} value={item.deviceId}>{item.deviceId}</Option>
+                                                <Option key={item.deviceId} value={item.deviceId}>{item.deviceId}</Option>
                                             )
                                         })}
                                     </Select>
@@ -261,7 +361,7 @@ export default function Home() {
             </Modal>
             <div className="homeTitle">
                 <div className="homeTitleInfo">
-                    <h1 style={{ color: '#fff' }}>护士控台管理系统</h1>
+                    <h1 style={{ color: '#fff' }}>照护站管理系统</h1>
                     <div className="funcList">
                         <div className='func borderRight'>
                             <i className='iconfont'>&#xe60f;</i>
@@ -289,16 +389,16 @@ export default function Home() {
                 <div className="homeUsers">
                     {userArr.map((a, index) => {
                         return (
-                            <div className="homeUser" key={a}>
+                            <div className="homeUser" key={a.nickName}>
                                 <div className="homeUserItem">
                                     <div className="homeNumberTitle">
                                         <div className="homeNumber">{a.roomId}</div>
                                         <i className='iconfont' onClick={() => { showEditModal({ id: a.id, nickName: a.nickName, headImg: a.headImg, deviceId: a.deviceId, roomId: a.roomId, age: a.age, gender: a.gender, introduce: a.introduce }) }}>&#xe600;</i>
                                     </div>
-                                    <Link to={`/${a.deviceId}`}>
+                                    <Link to={`user/${a.deviceId}`}>
                                         <div className="homeInfo">
                                             <div className="homeImg">
-                                                <img src={ticks[index]} alt="" />
+                                                <img src={imgArr[Number(a.headImg)]} alt="" />
                                             </div>
                                             <div className="nameAndOther">
                                                 <div className='userName'>{a.nickName}</div>

@@ -1,13 +1,15 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Img from '../../assets/img/a.jpg'
 import './user.css'
 import System from '../antapage/AntaCanvasFull32-64 copy'
-import Sleep from './sleep/Sleep1'
-import History from './history/History'
+import { Sleep } from './sleep/Sleep1'
+import { History } from './history/History'
 import axios from 'axios'
 import md5 from 'js-md5'
 import * as echarts from 'echarts'
+import { Button } from 'antd'
 import { computeData1, } from './sleep/Chart'
+import { useReactToPrint } from 'react-to-print';
 
 const createUrl = 'http://bah.bodyta.com:19356/rec/report'
 const historyUrl = 'https://bah.bodyta.com/rec/mark'
@@ -92,29 +94,39 @@ export default function User() {
         axios.post(historyUrl, {
             sign: md5(key + timestamp),
             timestamp: timestamp,
-            start_date: dateStr1(Date.parse(new Date()) - 16 * 24 * 3600 * 1000),
-            end_date: dateStr1(Date.parse(new Date()) - 10 * 24 * 3600 * 1000),
+            start_date: dateStr1(Date.parse(new Date()) - 20 * 24 * 3600 * 1000),
+            end_date: dateStr1(Date.parse(new Date()) - 14 * 24 * 3600 * 1000),
             did: deviceId,
         })
             .then((res) => {
                 const data = res.data.data
-                console.log(res)
+                console.log(res, 'user')
 
-                
-                let daArr = []
-                res.data.data.dt_arr.forEach((a, index) => {
-                    let b = a.split('-')
-                    daArr.push(`${b[1]}-${b[2]}`)
-                })
-                let duration_arr1 = res.data.data.duration_arr.map((a) => (timeToNum(a) / 60).toFixed(1))
 
-                setChart4X(daArr)
-                setChart4Y(data.score_arr)
-                
-                setChart5Y(duration_arr1)
+                if (res.data.data) {
+                    let daArr = []
+                    res.data.data.dt_arr.forEach((a, index) => {
+                        let b = a.split('-')
+                        daArr.push(`${b[1]}-${b[2]}`)
+                    })
+                    let duration_arr1 = res.data.data.duration_arr.map((a) => (timeToNum(a) / 60).toFixed(1))
+
+                    setChart4X(daArr)
+                    setChart4Y(data.score_arr)
+                    setChart5Y(duration_arr1)
+                }
 
             })
     }, [])
+
+    const sleepRef = useRef();
+    const historyRef = useRef()
+    const handleSleepPrint = useReactToPrint({
+        content: () => sleepRef.current,
+    });
+    const handleHistoryPrint = useReactToPrint({
+        content: () => historyRef.current,
+    });
 
     return (
         <div className="userPage">
@@ -122,9 +134,9 @@ export default function User() {
                 <div className="user">
                     <div className="userImg">
                         <div className="imgBox">
-                        <img src={Img} alt="" />
+                            <img src={Img} alt="" />
                         </div>
-                        
+
                     </div>
                     <div className="userAge">
                         <div className="name">王雨婷</div>
@@ -173,9 +185,14 @@ export default function User() {
                     {
                         stateItem.map((item, index) => {
                             return (
-                                <div className="userTitleItem" key={item} style={{ backgroundColor: state == index ? '#91cff3' : 'unset' ,     color: state == index ? '#fff' : '#aaa' }}  onClick={() => { setState(index) }}>
+                                <div className="userTitleItem" key={item} style={{ backgroundColor: state == index ? '#91cff3' : 'unset', color: state == index ? '#fff' : '#aaa' }} onClick={() => { setState(index) }}>
                                     <div className="userTitleItemBorder">
-                                        <div className='userTitleItemBox' > {item}</div>
+                                        <div className='userTitleItemBox' >
+                                            {item}
+
+                                        </div>
+                                        {item == '睡眠报告' && state == 1 ? <><Button onClick={handleSleepPrint}>打印</Button></> : null}
+                                        {item == '历史报告' && state == 2 ? <><Button onClick={handleHistoryPrint}>打印</Button></> : null}
                                     </div>
                                 </div>
                             )
@@ -184,11 +201,11 @@ export default function User() {
                 </div>
                 <div className="userContent">
                     {/* {state == 0 ? <System /> : state == 1 ? <div><Sleep /></div>  : <div> <History /></div>} */}
-                    <div style={{visibility : state == 0 ? 'unset' : 'hidden' , position : 'absolute'  , width : '100%', height : '100%'}}><System /></div>
-                    <div style={{visibility : state == 1 ? 'unset' : 'hidden', position : 'absolute', width : '100%', height : '100%'}}>
-                        <Sleep chart1={chart1} chart2X={chart2X} chart2Y={chart2Y} chart3Y={chart3Y} data={data} />
-                        </div> 
-                    <div style={{visibility : state == 2 ? 'unset' : 'hidden', position : 'absolute', width : '100%', height : '100%'}}> <History chart1={chart1} chart4X={chart4X} chart4Y={chart4Y} chart5Y={chart5Y} data={data} /></div>
+                    <div style={{ visibility: state == 0 ? 'unset' : 'hidden', position: 'absolute', width: '100%', height: '100%' }}><System /></div>
+                    <div style={{ visibility: state == 1 ? 'unset' : 'hidden', position: 'absolute', width: '100%', height: '100%' }}>
+                        <Sleep ref={sleepRef} chart1={chart1} chart2X={chart2X} chart2Y={chart2Y} chart3Y={chart3Y} data={data} />
+                    </div>
+                    <div style={{ visibility: state == 2 ? 'unset' : 'hidden', position: 'absolute', width: '100%', height: '100%' }}> <History ref={historyRef} chart1={chart1} chart4X={chart4X} chart4Y={chart4Y} chart5Y={chart5Y} data={data} /></div>
                 </div>
             </div>
         </div>

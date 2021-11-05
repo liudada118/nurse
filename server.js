@@ -57,13 +57,13 @@ SerialPort.list().then(ports => {
   console.info("=========================================================================================\r\n")
 });
 
-const port = new SerialPort("com3", { baudRate: 115200,autoOpen:true })
+const port = new SerialPort("com3", { baudRate: 400000,autoOpen:true })
 //管道添加解析器
 port.pipe(parser)
 parser.on('data', function(data) {
   let buffer = new Buffer(data);
   console.info(buffer.length)
-  if(buffer.length === 32){
+  if(buffer.length === 1024){
     for(var i=0;i<buffer.length;i++){
     pointArr[i]=buffer.readUInt8(i);
   }
