@@ -233,7 +233,7 @@ function Particles(props) {
     // if(props.compute){props.compute(Compute.computeAll(bigArrg))}
     // else{
 
-    //console.info(wsPointData);
+ 
     if (wsPointData.length > 0) {
       let i = 0, j = 0;
       for (let ix = 0; ix < AMOUNTX; ix++) {
@@ -271,7 +271,7 @@ function Particles(props) {
       }
       //attrib.current.needsUpdate = true;
 
-      //  console.info(mesh.rotation.x);
+  
       //  mesh.rotation.y = mesh.rotation.y += 0.01;
       attrib.current.parent.attributes.position.needsUpdate = true;
       attrib.current.parent.attributes.color.needsUpdate = true;
@@ -412,7 +412,7 @@ function Particles(props) {
 
   }
 
-  // console.log(positions ,colors ,'posttion')
+
   return (
     // onPointerOver={hover} onPointerOut={unhover}
     <points position={[props.postitonX, props.postitonY, props.postitonZ]} rotation={[0, props.rotationY, 0]}>
@@ -495,12 +495,12 @@ class Anta extends React.Component {
           if (oldBedFetchData4 != bedFetchData4) {
             // this.breathPause.current.innerHTML = bedFetchData4
           }
-          console.log(oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 0)
+
 
           if(bedFetchData3 == 0){
-            console.log(111111)
+        
             if(!ti){
-              console.log(2222)
+           
               ti = setTimeout(() => {
                 this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
                 ti = null
@@ -515,11 +515,11 @@ class Anta extends React.Component {
             this.bedFetchData1.current.children[1].style.display = 'unset'
             this.bedFetchData1.current.children[0].style.display = 'none'
            
-            console.log(1111)
+           
           } if (oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 1) {
             this.bedFetchData1.current.children[1].style.display = 'none'
             this.bedFetchData1.current.children[0].style.display = 'unset'
-            console.log(0)
+         
           }
   
           if (moveArr.length < 100) {
@@ -533,8 +533,28 @@ class Anta extends React.Component {
           }
           // moveArr = [1,2,3,4,5]
   
-          this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
-  
+          // this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
+          
+          let leftAndRight = computeStoke([...jsonObject.data],[...oldWsData],32,32)
+          let left = leftAndRight[0]
+          let right = leftAndRight[1]
+          
+          leftStoke.addValue(left)
+          rightStoke.addValue(right)
+          
+          let leftRes1 = leftStoke.computeValue(40)
+          let rightRes1 = rightStoke.computeValue(40)
+          reduce.addValue(Math.abs(leftRes1 - rightRes1))
+         
+          
+            if((leftRes1 >= 25 && rightRes1 < 10) || (rightRes1 >= 25 && leftRes1 < 10) ){
+              this.stroke.current.innerHTML = '危险'
+            }else{
+              this.stroke.current.innerHTML = '正常'
+            }
+     
+            this.initCharts({ yData: reduce.stack, xData: [], index: 0 + 1, name: '中风', myChart: myChart1, })
+          
           // if (oldBedFetchData2 != bedFetchData2) {
             // this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
           // }
@@ -604,6 +624,7 @@ class Anta extends React.Component {
     this.start = React.createRef();
     this.drop = React.createRef();
     this.num = React.createRef();
+    this.content = React.createRef();
     this.state = {
       fliter: 100,
       IDArr: [],
@@ -811,7 +832,7 @@ class Anta extends React.Component {
     return (
       <>
 
-        <div style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}>
+        <div ref={this.content} style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}>
 
 
 

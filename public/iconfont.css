@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2896723 */
-  src: url('iconfont.woff2?t=1635319394801') format('woff2'),
-       url('iconfont.woff?t=1635319394801') format('woff'),
-       url('iconfont.ttf?t=1635319394801') format('truetype');
+  src: url('iconfont.woff2?t=1636095983755') format('woff2'),
+       url('iconfont.woff?t=1636095983755') format('woff'),
+       url('iconfont.ttf?t=1636095983755') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-icon-:before {
+  content: "\e607";
 }
 
 .icon-bianji:before {

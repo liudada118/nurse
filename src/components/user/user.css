@@ -118,4 +118,24 @@
     display: flex;
     align-items : center;
 }
+.userTitles{
+    display: flex;
+    font-size: 26px;
+}
+.print{
+    height: 100%;
+    display: flex;
+    align-items : center;
+    justify-content : center;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    padding: 10px;
+    margin-left: 10px;
+}   
+.print i{
+    font-size: 26px;
+    color: rgb(170, 170, 170);
+    text-align: center;
+    padding: 0;
+}
 
