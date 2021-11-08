@@ -15,7 +15,7 @@ import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import htmlToPdfmake from 'html-to-pdfmake';
 import createPdf from '../../assets/js/createPdf'
-
+// import {allData} from '../home/Home'
 const createUrl = 'http://bah.bodyta.com:19356/rec/report'
 const historyUrl = 'https://bah.bodyta.com/rec/mark'
 const key = '13a43a4fd27e4b9e8acee7b82c11e27c'
@@ -26,7 +26,6 @@ const day = new Date().getDate()
 const date = `${year}-${month}-${day}`
 const deviceId = '474887766'
 const dateStr = '2021-10-14'
-
 function dateStr1(date) {
     const year = new Date(date).getFullYear()
     const month = new Date(date).getMonth() + 1
@@ -42,7 +41,7 @@ function timeToNum(time) {
 
 
 const stateItem = ['实时状态', '睡眠报告', '历史报告']
-export default function User() {
+export default function User(props) {
     const [state, setState] = useState(0)
 
     const [data, setData] = useState({})
@@ -54,16 +53,21 @@ export default function User() {
     const [chart4Y, setChart4Y] = useState()
     const [chart5Y, setChart5Y] = useState()
 
+    const realRef = useRef()
+    const sleepRef = useRef();
+    const historyRef = useRef()
+    const user = useRef()
+
     const printDocument = useReactToPrint({
         content: () => user.current,
-      });
+    });
 
     const handlePrint = (e) => {
         if (e.key == 'item_0') {
             createPdf(user.current)
         } else if (e.key == 'item_1') {
             printDocument()
-        } 
+        }
     }
 
     const menu = (
@@ -80,7 +84,7 @@ export default function User() {
     useEffect(() => {
         // var chart1 = document.getElementById('chart1');
         // 
-        console.log(realRef.current)
+
         // 当天数据请求
         axios.post(createUrl, {
             sign: md5(key + timestamp),
@@ -90,7 +94,7 @@ export default function User() {
         })
             .then((res) => {
                 const data = res.data.data[0]
-                console.log(res.data.data[0])
+
                 setData(res.data.data[0])
 
 
@@ -130,7 +134,7 @@ export default function User() {
         })
             .then((res) => {
                 const data = res.data.data
-                console.log(res, 'user')
+
 
 
                 if (res.data.data) {
@@ -149,10 +153,56 @@ export default function User() {
             })
     }, [])
 
-    const realRef = useRef()
-    const sleepRef = useRef();
-    const historyRef = useRef()
-    const user = useRef()
+    // ws 数据刷新
+    useEffect(() => {
+        // console.log(allData)
+        const ws = new WebSocket('ws://sensor.bodyta.com:8888/insure/12')
+        ws.onopen = () => {
+            console.log('open')
+        }
+        ws.onmessage = (e) => {
+            let allData = JSON.parse(e.data)
+            if (allData.did === props.match.params.id) {
+                console.log(allData)
+
+                // 呼吸
+                if(realRef.current.footForm.current.innerHTML != allData.breath){
+                    realRef.current.footForm.current.innerHTML = allData.breath
+                }
+                
+                // 在离床
+                if (allData.leaveBedFlag == 0) {
+                    realRef.current.bedFetchData1.current.children[1].style.display = 'unset'
+                    realRef.current.bedFetchData1.current.children[0].style.display = 'none'
+                } else  {
+                    realRef.current.bedFetchData1.current.children[1].style.display = 'none'
+                    realRef.current.bedFetchData1.current.children[0].style.display = 'unset'
+                }
+
+                // 脑卒中
+                if(realRef.current.stroke.current.innerHTML != allData.stroke){
+                    realRef.current.stroke.current.innerHTML = allData.stroke
+                }
+
+                // 呼吸暂停
+
+                if(realRef.current.breathPause.current.innerHTML != allData.breathPause){
+                    realRef.current.breathPause.current.innerHTML = allData.breathPause
+                }
+
+                // 睡姿
+
+                if(realRef.current.train.current.innerHTML != allData.train){
+                    realRef.current.train.current.innerHTML = allData.train == '平躺' ? '平躺' : '侧睡'
+                }
+
+            }
+        }
+    }, [])
+
+
+
+
 
 
     return (

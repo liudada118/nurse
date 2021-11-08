@@ -6,6 +6,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import HeadImgSelect from '../headImgSelect/HeadImgSelect'
 import { imgArr } from '../headImgSelect/HeadImgSelect'
+export let allData
 // import { obj } from '../../assets/js/ws'
 const demoImgArr = ["b", "c", 'd', 'e', 'f', 'g', 'h']
 const ticks = demoImgArr.map(item => require("../../assets/img/" + item + ".jpeg"))
@@ -254,6 +255,17 @@ export default function Home() {
         { label: '性别', value: gender },
         { label: '介绍', value: introduce },
     ]
+
+    useEffect(() => {
+        const ws = new WebSocket('ws://sensor.bodyta.com:8888/insure/12')
+        ws.onopen = () => {
+            console.log('open')
+        }
+        ws.onmessage = (e) => {
+            allData = JSON.parse(e.data)
+            // console.log(allData)
+        }
+    }, [])
     return (
         <>
             <Modal title="编辑"
