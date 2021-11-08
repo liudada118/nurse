@@ -153,52 +153,52 @@ export default function User(props) {
             })
     }, [])
 
-    // ws 数据刷新
-    useEffect(() => {
-        // console.log(allData)
-        const ws = new WebSocket('ws://sensor.bodyta.com:8888/insure/12')
-        ws.onopen = () => {
-            console.log('open')
-        }
-        ws.onmessage = (e) => {
-            let allData = JSON.parse(e.data)
-            if (allData.did === props.match.params.id) {
-                console.log(allData)
+    // // ws 数据刷新
+    // useEffect(() => {
+    //     // console.log(allData)
+    //     const ws = new WebSocket('ws://sensor.bodyta.com:8888/insure/12')
+    //     ws.onopen = () => {
+    //         console.log('open')
+    //     }
+    //     ws.onmessage = (e) => {
+    //         let allData = JSON.parse(e.data)
+    //         if (allData.did === props.match.params.id) {
+    //             console.log(allData)
 
-                // 呼吸
-                if(realRef.current.footForm.current.innerHTML != allData.breath){
-                    realRef.current.footForm.current.innerHTML = allData.breath
-                }
+    //             // 呼吸
+    //             if(realRef.current.footForm.current.innerHTML != allData.breath){
+    //                 realRef.current.footForm.current.innerHTML = allData.breath
+    //             }
                 
-                // 在离床
-                if (allData.leaveBedFlag == 0) {
-                    realRef.current.bedFetchData1.current.children[1].style.display = 'unset'
-                    realRef.current.bedFetchData1.current.children[0].style.display = 'none'
-                } else  {
-                    realRef.current.bedFetchData1.current.children[1].style.display = 'none'
-                    realRef.current.bedFetchData1.current.children[0].style.display = 'unset'
-                }
+    //             // 在离床
+    //             if (allData.leaveBedFlag == 0) {
+    //                 realRef.current.bedFetchData1.current.children[1].style.display = 'unset'
+    //                 realRef.current.bedFetchData1.current.children[0].style.display = 'none'
+    //             } else  {
+    //                 realRef.current.bedFetchData1.current.children[1].style.display = 'none'
+    //                 realRef.current.bedFetchData1.current.children[0].style.display = 'unset'
+    //             }
 
-                // 脑卒中
-                if(realRef.current.stroke.current.innerHTML != allData.stroke){
-                    realRef.current.stroke.current.innerHTML = allData.stroke
-                }
+    //             // 脑卒中
+    //             if(realRef.current.stroke.current.innerHTML != allData.stroke){
+    //                 realRef.current.stroke.current.innerHTML = allData.stroke
+    //             }
 
-                // 呼吸暂停
+    //             // 呼吸暂停
 
-                if(realRef.current.breathPause.current.innerHTML != allData.breathPause){
-                    realRef.current.breathPause.current.innerHTML = allData.breathPause
-                }
+    //             if(realRef.current.breathPause.current.innerHTML != allData.breathPause){
+    //                 realRef.current.breathPause.current.innerHTML = allData.breathPause
+    //             }
 
-                // 睡姿
+    //             // 睡姿
 
-                if(realRef.current.train.current.innerHTML != allData.train){
-                    realRef.current.train.current.innerHTML = allData.train == '平躺' ? '平躺' : '侧睡'
-                }
+    //             if(realRef.current.train.current.innerHTML != allData.train){
+    //                 realRef.current.train.current.innerHTML = allData.train == '平躺' ? '平躺' : '侧睡'
+    //             }
 
-            }
-        }
-    }, [])
+    //         }
+    //     }
+    // }, [])
 
 
 
