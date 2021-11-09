@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="duigoutianchong-" unicode="&#58932;" d="M512 878.08C240.64 878.08 20.48 655.36 20.48 386.56S240.64-104.96 512-104.96s491.52 220.16 491.52 491.52S783.36 878.08 512 878.08z m299.52-355.84L483.84 192c-12.8-12.8-30.72-20.48-48.64-20.48s-35.84 7.68-48.64 20.48l-168.96 168.96c-12.8 12.8-12.8 30.72 0 43.52s30.72 12.8 43.52 0l168.96-168.96c2.56-2.56 10.24-2.56 12.8 0L768 565.76c12.8 12.8 30.72 12.8 43.52 0s12.8-33.28 0-43.52z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>

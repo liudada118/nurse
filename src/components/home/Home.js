@@ -6,10 +6,21 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import HeadImgSelect from '../headImgSelect/HeadImgSelect'
 import { imgArr } from '../headImgSelect/HeadImgSelect'
+import { connect } from 'react-redux'
+import b from '../../assets/img/b.jpeg'
+import c from '../../assets/img/c.jpeg'
+import d from '../../assets/img/d.jpeg'
+import e from '../../assets/img/e.jpeg'
+import f from '../../assets/img/f.jpeg'
+import g from '../../assets/img/g.jpeg'
+
 export let allData
 // import { obj } from '../../assets/js/ws'
-const demoImgArr = ["b", "c", 'd', 'e', 'f', 'g', 'h']
-const ticks = demoImgArr.map(item => require("../../assets/img/" + item + ".jpeg"))
+// const demoImgArr = ["b", "c", 'd', 'e', 'f', 'g', 'h']
+// const ticks = demoImgArr.map(item => require("../../assets/img/" + item + ".jpeg"))
+
+
+const ticks = [b, c, d, e, f, g]
 console.log(ticks)
 
 const { Option } = Select;
@@ -36,7 +47,10 @@ let info = [
 
 
 
-export default function Home() {
+function Home(props) {
+    useEffect(() => {
+        console.log(props.data.bodytaMove)
+    },[props.data])
     const [normal, setNormal] = useState(true)
     const [isEditVisible, setIsEditVisible] = useState(false)
     const [isAddVisible, setIsAddVisible] = useState(false)
@@ -80,7 +94,7 @@ export default function Home() {
                     message.error('网络错误');
                 }
 
-            }).catch(err =>{
+            }).catch(err => {
                 message.error('网络错误');
             })
     };
@@ -144,30 +158,30 @@ export default function Home() {
         setIntroduce('')
     };
     const handleAddOk = () => {
-        if([nickName , deviceId,roomId].every ( a => a!='')){
+        if ([nickName, deviceId, roomId].every(a => a != '')) {
             axios.post(`http://sensor.bodyta.com:8888/insure/insertBed?nickName=${nickName}&headImg=${headImg}&deviceId=${deviceId}&roomId=${roomId}&age=${age}&gender=${gender}&introduce=${introduce}`)
-            .then((res) => {
-                if (res.data.msg == 'success') {
-                    setIsAddVisible(false);
-                    message.success('添加成功');
-                    axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
-                        .then((res) => {
-                            console.log(res.data.data)
-                            setUserArr(res.data.data)
-                        }).catch(err => {
-                            console.log(err)
-                        })
-                } else {
-                    message.error('网络错误');
-                }
+                .then((res) => {
+                    if (res.data.msg == 'success') {
+                        setIsAddVisible(false);
+                        message.success('添加成功');
+                        axios.get('http://sensor.bodyta.com:8888/insure/selectBed')
+                            .then((res) => {
+                                console.log(res.data.data)
+                                setUserArr(res.data.data)
+                            }).catch(err => {
+                                console.log(err)
+                            })
+                    } else {
+                        message.error('网络错误');
+                    }
 
-            }).catch(err => {
-                message.error('网络错误');
-            })
-        }else{
+                }).catch(err => {
+                    message.error('网络错误');
+                })
+        } else {
             message.error(`${nickName == '' ? '名字' : ''} ${deviceId == '' ? '设备' : ''} ${roomId == '' ? '房间号' : ''}不能为空`);
         }
-        
+
     };
     const handleAddCancel = () => {
         setIsAddVisible(false);
@@ -257,17 +271,17 @@ export default function Home() {
     ]
 
     useEffect(() => {
-        const ws = new WebSocket('ws://sensor.bodyta.com:8888/insure/12')
-        ws.onopen = () => {
-            console.log('open')
-        }
-        ws.onmessage = (e) => {
-            allData = JSON.parse(e.data)
-            // console.log(allData)
-        }
+        // const ws = new WebSocket('ws://sensor.bodyta.com:8888/insure/12')
+        // ws.onopen = () => {
+        //     console.log('open')
+        // }
+        // ws.onmessage = (e) => {
+        //     allData = JSON.parse(e.data)
+        //     console.log(allData , 'home')
+        // }
     }, [])
 
-    
+
 
     return (
         <>
@@ -339,37 +353,37 @@ export default function Home() {
                     return (
                         <div className='listItem' key={item.label}>
                             {item.label == '性别'
-                                        ? <> <span className='listLabel'>{item.label}:</span><Radio.Group onChange={onChangeGender} value={gender}>
-                                            <Radio value={0}>男</Radio>
-                                            <Radio value={1}>女</Radio>
-                                        </Radio.Group></>
-                                        : item.label == '设备Id'
-                                ? <>
-                                    <span className='listLabel'>{item.label}:</span>
-                                    <Select
-                                        className='listInput'
-                                        showSearch
-                                        value={deviceId}
-                                        placeholder="选择设备id"
-                                        optionFilterProp="children"
-                                        onChange={onChange}
-                                        onFocus={onFocus}
-                                        onBlur={onBlur}
-                                        onSearch={onSearch}
-                                        filterOption={(input, option) =>
-                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                    >
-                                        {devicedArr.map((item, index) => {
-                                            return (
-                                                <Option key={item.deviceId} value={item.deviceId}>{item.deviceId}</Option>
-                                            )
-                                        })}
-                                    </Select>
-                                </>
-                                : <> <span className='listLabel'>{item.label}:</span>
-                                    <div className='listInput'>
-                                        <Input placeholder={item.label} value={item.value} onChange={(e) => { changeValue(e, item.label) }} /></div></>}
+                                ? <> <span className='listLabel'>{item.label}:</span><Radio.Group onChange={onChangeGender} value={gender}>
+                                    <Radio value={0}>男</Radio>
+                                    <Radio value={1}>女</Radio>
+                                </Radio.Group></>
+                                : item.label == '设备Id'
+                                    ? <>
+                                        <span className='listLabel'>{item.label}:</span>
+                                        <Select
+                                            className='listInput'
+                                            showSearch
+                                            value={deviceId}
+                                            placeholder="选择设备id"
+                                            optionFilterProp="children"
+                                            onChange={onChange}
+                                            onFocus={onFocus}
+                                            onBlur={onBlur}
+                                            onSearch={onSearch}
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                        >
+                                            {devicedArr.map((item, index) => {
+                                                return (
+                                                    <Option key={item.deviceId} value={item.deviceId}>{item.deviceId}</Option>
+                                                )
+                                            })}
+                                        </Select>
+                                    </>
+                                    : <> <span className='listLabel'>{item.label}:</span>
+                                        <div className='listInput'>
+                                            <Input placeholder={item.label} value={item.value} onChange={(e) => { changeValue(e, item.label) }} /></div></>}
                         </div>
                     )
                 })}
@@ -437,3 +451,14 @@ export default function Home() {
         </>
     )
 }
+
+const mapStateToProps = (state) => {
+    return {data : state}
+}
+// const mapDispatchToProps = (dispatch) => {
+//    return {data : dispatch()}
+// }
+export default connect(
+    mapStateToProps,
+    // mapDispatchToProps
+)(Home)

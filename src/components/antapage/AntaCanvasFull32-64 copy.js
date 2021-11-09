@@ -30,7 +30,7 @@ let dateArr = new Array();
 let timeArr = []
 let lastTimeSum = 0
 let timeSum = 0
-const yMax = 255
+const yMax = 50
 let ti
 let oldWsData = new Array(1024).fill(0)
 let leftStoke = new Stoke(50)
@@ -497,20 +497,20 @@ class Anta extends React.Component {
           }
 
 
-          if(bedFetchData3 == 0){
+          // if(bedFetchData3 == 0){
         
-            if(!ti){
+          //   if(!ti){
            
-              ti = setTimeout(() => {
-                this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
-                ti = null
-              },2000)
-            }
+          //     ti = setTimeout(() => {
+          //       this.footForm.current.innerHTML =Math.floor(14 +  Math.random()*3)
+          //       ti = null
+          //     },2000)
+          //   }
             
             
-          }else{
-            this.footForm.current.innerHTML = '--'
-          }
+          // }else{
+          //   this.footForm.current.innerHTML = '--'
+          // }
           if (oldBedFetchData3 != bedFetchData3 && bedFetchData3 == 0) {
             this.bedFetchData1.current.children[1].style.display = 'unset'
             this.bedFetchData1.current.children[0].style.display = 'none'
@@ -535,29 +535,29 @@ class Anta extends React.Component {
   
           // this.initCharts({ yData: moveArr, xData: dateArr, index: 0 + 1, name: '体动', myChart: myChart1, })
           
-          let leftAndRight = computeStoke([...wsPointData1],[...oldWsData],32,32)
+          let leftAndRight = computeStoke([...jsonObject.data],[...oldWsData],32,32)
           let left = leftAndRight[0]
           let right = leftAndRight[1]
           
           leftStoke.addValue(left)
           rightStoke.addValue(right)
           console.log(left,right)
-          let leftRes1 = leftStoke.computeValue(40)
-          let rightRes1 = rightStoke.computeValue(40)
+          let leftRes1 = leftStoke.computeValue(700)
+          let rightRes1 = rightStoke.computeValue(700)
           reduce.addValue(Math.abs(leftRes1 - rightRes1))
-          oldWsData = [...wsPointData1]
+          oldWsData = [...jsonObject.data]
           
             if((leftRes1 >= 25 && rightRes1 < 10) || (rightRes1 >= 25 && leftRes1 < 10) ){
-              this.stroke.current.innerHTML =`${left},${right}` //'危险'
+              this.stroke.current.innerHTML ='危险'
             }else{
-              this.stroke.current.innerHTML =`${left},${right}` //'正常'
+              this.stroke.current.innerHTML ='正常'
             }
      
             this.initCharts({ yData: reduce.stack, xData: [], index: 0 + 1, name: '中风', myChart: myChart1, })
           
-          // if (oldBedFetchData2 != bedFetchData2) {
-            // this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
-          // }
+          if (oldBedFetchData2 != bedFetchData2) {
+            this.footForm.current.innerHTML = bedFetchData2 == 0 ? '--' : bedFetchData2
+          }
           
   
           oldBedFetchData1 = bedFetchData1

@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d1ff3ca8.chunk.css",
+    "main.js": "/static/js/main.7712ed04.chunk.js",
+    "runtime~main.js": "/static/js/runtime~main.05844fe3.js",
+    "static/css/2.c505eed7.chunk.css": "/static/css/2.c505eed7.chunk.css",
+    "static/js/2.afcbd4c4.chunk.js": "/static/js/2.afcbd4c4.chunk.js",
+    "static/js/3.070fc4fd.chunk.js": "/static/js/3.070fc4fd.chunk.js",
+    "static/js/4.73c25132.chunk.js": "/static/js/4.73c25132.chunk.js",
+    "index.html": "/index.html",
+    "precache-manifest.944f7ae7afcf3b6bea22c30e9076a1e0.js": "/precache-manifest.944f7ae7afcf3b6bea22c30e9076a1e0.js",
+    "service-worker.js": "/service-worker.js",
+    "static/media/1.mp4": "/static/media/1.c163293e.mp4",
+    "static/media/a.jpg": "/static/media/a.35fb3dc3.jpg",
+    "static/media/b.jpeg": "/static/media/b.eda2221d.jpeg",
+    "static/media/c.jpeg": "/static/media/c.f76511c1.jpeg",
+    "static/media/d.jpeg": "/static/media/d.3c1245bf.jpeg",
+    "static/media/e.jpeg": "/static/media/e.e0b9b06d.jpeg",
+    "static/media/index.css": "/static/media/element-icons.d2f69a92.woff",
+    "static/media/f.jpeg": "/static/media/f.5300f9ad.jpeg",
+    "static/media/g.jpeg": "/static/media/g.8e8781ec.jpeg",
+    "static/media/h.jpeg": "/static/media/h.7cc601ce.jpeg",
+    "static/media/side.png": "/static/media/side.4f563be0.png",
+    "static/media/sleep.png": "/static/media/sleep.015150e6.png",
+    "static/media/App.css": "/static/media/苹方-简.d5ae250f.ttf"
+  }
+}

@@ -15,6 +15,8 @@ import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import htmlToPdfmake from 'html-to-pdfmake';
 import createPdf from '../../assets/js/createPdf'
+import UnitSelect from '../select/UnitSelect'
+import UnitSelect1 from '../select/UnitSelect1'
 // import {allData} from '../home/Home'
 const createUrl = 'http://bah.bodyta.com:19356/rec/report'
 const historyUrl = 'https://bah.bodyta.com/rec/mark'
@@ -128,8 +130,8 @@ export default function User(props) {
         axios.post(historyUrl, {
             sign: md5(key + timestamp),
             timestamp: timestamp,
-            start_date: dateStr1(Date.parse(new Date()) - 20 * 24 * 3600 * 1000),
-            end_date: dateStr1(Date.parse(new Date()) - 14 * 24 * 3600 * 1000),
+            start_date: dateStr1(Date.parse(new Date('2021-10-19')) - 6 * 24 * 3600 * 1000),
+            end_date: dateStr1(Date.parse(new Date('2021-10-19'))),
             did: deviceId,
         })
             .then((res) => {
@@ -282,8 +284,14 @@ export default function User(props) {
                         <Dropdown overlay={menu} placement="bottomLeft" arrow>
                             <i className='iconfont'>&#xe607;</i>
                         </Dropdown>
+                        {/* <UnitSelect /> */}
 
                     </div>
+                    {/* <div className="print" style={{width: 400}}>
+                   
+                        <UnitSelect1 />
+
+                    </div> */}
                 </div>
                 <div className="userContent">
                     {/* {state == 0 ? <System /> : state == 1 ? <div><Sleep /></div>  : <div> <History /></div>} */}
